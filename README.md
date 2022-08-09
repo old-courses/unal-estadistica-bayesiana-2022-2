@@ -5,3 +5,4 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 ## Contenido
 
 1. Introducción.
+2. Intercambiabilidad.
