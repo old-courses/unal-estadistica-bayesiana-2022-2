@@ -9,4 +9,6 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 
 ## Talleres
 
-Taller 1.
+- Taller 1.
+
+## Data
