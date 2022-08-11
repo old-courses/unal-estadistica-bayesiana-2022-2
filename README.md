@@ -6,3 +6,7 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 
 1. Introducción.
 2. Intercambiabilidad.
+
+## Talleres
+
+1. Taller 1.
