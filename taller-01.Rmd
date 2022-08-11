@@ -1,0 +1,130 @@
+---
+title: "Taller 1"
+author: 
+- Juan Sosa PhD
+- Webpage https://sites.google.com/view/juansosa/ 
+- YouTube https://www.youtube.com/c/JuanSosa1702 
+- GitHub  https://github.com/jstats1702 
+- Rpubs   https://rpubs.com/jstats1702
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Suponga que si $\theta = i$, entonces $y$ tiene una distribución Normal con media $i$ y desviación estándar $\sigma$, para $i = 1,2$. Además, suponga que $\textsf{Pr}(\theta = 1) = \textsf{Pr}(\theta = 2) = 0.5$.
+
+a. Escriba una expresión general para la densidad marginal de $y$ y dibújela para $\sigma = 2$.
+b. Calcule $\textsf{Pr}(\theta = 1\mid y = 1)$ y $\textsf{Pr}(\theta = 2\mid y = 1)$ para $\sigma = 2$.
+
+2. Suponga que la urna $C$ está llena de 60\% de balotas verdes y 40\% de balotas rojas, y que la urna $S$ está llena de 40\% de balotas verdes y 60\% de balotas rojas. Alguien lanza una moneda y selecciona una balota de la urna $C$ o la urna $S$ dependiendo de si la moneda cae cara o sello, respectivamente. Sea $x$ igual a 1 si la moneda cae cara y 0 si la moneda cae sello, y sea $y$ igual a 1 si la balota es verde y 0 si la balota es roja. 
+
+a. Calcule $\textsf{Var}(y)$, $\textsf{Var}(y\mid x = 0)$, $\textsf{Var}(y\mid x = 1)$. 			
+b. Considerando la varianza como una medida de la incertidumbre, explique por qué una de estas varianzas es mayor que las otras.
+
+3. Por lo general, los estadísticos tienden a tener personalidades tímidas con más frecuencia que los economistas. Se cuantifica esta observación asumiendo que el 80\% de los estadísticos son tímidos, pero el porcentaje correspondiente entre los economistas es sólo del 15\%. A las conferencias sobre econometría asisten casi exclusivamente economistas y estadísticos, y la mayoría de los participantes son economistas. Se cuantifica esta observación asumiendo que el 90\% de los asistentes son economistas (y el resto estadísticos).
+
+a. Suponga que Usted (un físico, digamos) va a una conferencia de econometría y entabla una conversación con la primera persona que conoce (al azar) y descubre que esta persona es tímida. El objetivo de este problema es mostrar que la probabilidad (condicional) $p$ de que esté hablando con un estadístico, dados estos datos y los antecedentes, es de aproximadamente 37\%. Sea $St =$ "la persona es estadística", $E =$ ''la persona es economista" y $Sh =$ "la persona es tímida". Muestre que:
+$$
+\frac{ \textsf{Pr} ( St \mid Sh  ) }{ \textsf{Pr} ( E \mid Sh ) } =  \frac{ \textsf{Pr} ( St ) }{ \textsf{Pr} ( E ) } \cdot \frac{ \textsf{Pr} ( Sh \mid St ) }{ \textsf{Pr} ( Sh \mid E ) }\,.
+$$	
+b. Muestre que la posibilidad relativa posterior $o$ a favor de $St$ sobre $E$ dados los datos, es $o = \frac{ 16 }{ 27 } \approx 0.593$.
+c. Muestre que la probabilidad pedida en este problema es $p = \frac{ o }{ 1 + o } = \frac{ 16 }{ 43 } \approx 0.372$.
+d. Alguien dice, "esa probabilidad no puede ser correcta: el 80\% de los estadísticos son tímidos, frente al 15\% de los economistas, por lo que su probabilidad de hablar con un estadístico debe ser superior al 50\%". Explique por qué esta línea de razonamiento es incorrecta y por qué $p$ debería ser menor del 50\%.
+
+# Solución {-}
+
+1. Suponga que si $\theta = i$, entonces $y$ tiene una distribución Normal con media $i$ y desviación estándar $\sigma$, para $i = 1,2$. Además, suponga que $\textsf{Pr}(\theta = 1) = \textsf{Pr}(\theta = 2) = 0.5$.
+
+a. Escriba una expresión general para la densidad marginal de $y$ y dibújela para $\sigma = 2$.
+    
+Se tiene que $p(y\mid\theta)=\textsf{N}(y\mid\theta,\sigma^2)$ y $p(\theta)=0.5$, para $\theta\in\Theta=\{1,2\}$. Por lo tanto la densidad marginal de $y$ es:
+$$
+\begin{align*}
+p(y) &= \sum_{\Theta} p(y\mid\theta)\,p(\theta)\\
+&=0.5\textsf{N}(y\mid 1,\sigma^2)+0.5\textsf{N}(y\mid 2,\sigma^2)
+\end{align*}
+$$
+Además, el gráfico de $p(y)$ si $\sigma=2$ es:
+
+```{r, fig.align='center'}
+py <- function(y) 0.5*dnorm(y,1,2) + 0.5*dnorm(y,2,2)
+curve(expr = py, from = -7, to = 10, lwd = 2, col = 4, xlab = "y", ylab = "p(y)")
+```
+
+b. Calcule $\textsf{Pr}(\theta = 1\mid y = 1)$ y $\textsf{Pr}(\theta = 2\mid y = 1)$ para $\sigma = 2$.
+    
+Usando el Teorema de Bayes, se tiene que con $y=1$ y $\sigma=2$:
+$$
+\begin{align*}
+p(\theta\mid y = 1) &= \frac{p(y=1\mid\theta)p(\theta)}{p(y=1)} \\
+&= \frac{0.5\textsf{N}(y=1\mid \theta,2^2)}{0.5\textsf{N}(y=1\mid 1,2^2)+0.5\textsf{N}(y=1\mid 2,2^2)} \\
+&= \frac{\textsf{N}(y=1\mid \theta,2^2)}{\textsf{N}(y=1\mid 1,2^2)+\textsf{N}(y=1\mid 2,2^2)}
+\end{align*}
+$$
+Así, $\textsf{Pr}(\theta = 1\mid y = 1)=0.5312$ y $\textsf{Pr}(\theta = 2\mid y = 1)=0.4688$.
+
+```{r}
+# Pr(theta = 1 | y = 1)
+dnorm(1,1,2)/(dnorm(1,1,2) + dnorm(1,2,2))
+# Pr(theta = 2 | y = 1)
+dnorm(1,2,2)/(dnorm(1,1,2) + dnorm(1,2,2))
+```
+
+2. Suponga que la urna $C$ está llena de 60\% de balotas verdes y 40\% de balotas rojas, y que la urna $S$ está llena de 40\% de balotas verdes y 60\% de balotas rojas. Alguien lanza una moneda y selecciona una balota de la urna $C$ o la urna $S$ dependiendo de si la moneda cae cara o sello, respectivamente. Sea $x$ igual a 1 si la moneda cae cara y 0 si la moneda cae sello, y sea $y$ igual a 1 si la balota es verde y 0 si la balota es roja. 
+
+a. Calcule $\textsf{Var}(y)$, $\textsf{Var}(y\mid x = 0)$, $\textsf{Var}(y\mid x = 1)$.
+        
+Se tiene que $y\mid x = 0\sim\textsf{Ber}(0.4)$ y $y\mid x = 1\sim\textsf{Ber}(0.6)$, dado que el "éxito" en este experimento de Bernoulli consiste en que el color de la balota sea Verde. De otra parte, aplicando el Teorema de la Probabilidad Total, se tiene que:
+$$
+\begin{align*}
+p(y=1) &= \sum_{x\in\{0,1\}} p(y=1\mid x)p(x)\\
+&= p(y=1\mid x = 0)p(x=0) + p(y=1\mid x = 1)p(x=1) \\
+&= (0.4)(0.5) + (0.6)(0.5) \\
+&= 0.5
+\end{align*}
+$$
+y por lo tanto la distribución marginal de $y$ es $y\sim\textsf{Ber}(0.5)$. Así, $\textsf{Var}(y)=(0.5)(0.5)=0.25$, $\textsf{Var}(y\mid x = 0)=(0.4)(0.6)=0.24$, $\textsf{Var}(y\mid x = 1)=(0.6)(0.4)=0.24$.
+    
+b. Considerando la varianza como una medida de la incertidumbre, explique por qué una de estas varianzas es mayor que las otras. 
+
+Intuitivamente, se tiene que $\textsf{Var(y)}\geq\textsf{Var}(y\mid x)$ dado que la incertidumbre sin condicionar en valores específicos de $x$ (marginal) acerca de $y$ debe ser mayor o igual que la incertidumbre acerca de $y$ bajo condiciones específicas de $x$. Una demostración formal se puede hacer utilizando la Ley de la Varianza Total (ver https://en.wikipedia.org/wiki/Law_of_total_variance por ejemplo).
+
+3. Por lo general, los estadísticos tienden a tener personalidades tímidas con más frecuencia que los economistas. Se cuantifica esta observación asumiendo que el 80\% de los estadísticos son tímidos, pero el porcentaje correspondiente entre los economistas es sólo del 15\%. A las conferencias sobre econometría asisten casi exclusivamente economistas y estadísticos, y la mayoría de los participantes son economistas. Se cuantifica esta observación asumiendo que el 90\% de los asistentes son economistas (y el resto estadísticos).
+
+a. Suponga que Usted (un físico, digamos) va a una conferencia de econometría y entabla una conversación con la primera persona que conoce (al azar) y descubre que esta persona es tímida. El objetivo de este problema es mostrar que la probabilidad (condicional) $p$ de que esté hablando con un estadístico, dados estos datos y los antecedentes, es de aproximadamente 37\%. Sea $St =$ "la persona es estadística", $E =$ ''la persona es economista" y $Sh =$ "la persona es tímida". Muestre que:
+$$
+\frac{ \textsf{Pr} ( St \mid Sh  ) }{ \textsf{Pr} ( E \mid Sh ) } =  \frac{ \textsf{Pr} ( St ) }{ \textsf{Pr} ( E ) } \cdot \frac{ \textsf{Pr} ( Sh \mid St ) }{ \textsf{Pr} ( Sh \mid E ) }\,.
+$$	
+
+Aplicando el Teorema de Bayes se tiene que:
+$$
+\textsf{Pr}(St\mid Sh) = \frac{\textsf{Pr}(Sh\mid St)\textsf{Pr}(St)}{\textsf{Pr}(Sh)}
+\qquad\text{y}\qquad
+\textsf{Pr}(E\mid Sh) = \frac{\textsf{Pr}(Sh\mid E)\textsf{Pr}(E)}{\textsf{Pr}(Sh)}
+$$
+y por lo tanto, haciendo el cociente entre la primera expresión y la segunda, se logra el resultado deseado.
+
+b. Muestre que la posibilidad relativa posterior $o$ a favor de $St$ sobre $E$ dados los datos, es $o = \frac{ 16 }{ 27 } \approx 0.593$.
+    
+Utilizando el resultado anterior junto con los antecedentes (supuestos y juicios de valor) $\mathcal{B}$ para este problema, se tiene que:
+$$
+o = \frac{ \textsf{Pr} ( St \mid Sh  ) }{ \textsf{Pr} ( E \mid Sh ) } =  \frac{ \textsf{Pr} ( St ) }{ \textsf{Pr} ( E ) } \cdot \frac{ \textsf{Pr} ( Sh \mid St ) }{ \textsf{Pr} ( Sh \mid E ) } = \frac{0.1}{0.9}\cdot\frac{0.8}{0.15} =0.5925926 \,.
+$$
+    
+c. Muestre que la probabilidad pedida en este problema es $p = \frac{ o }{ 1 + o } = \frac{ 16 }{ 43 } \approx 0.372$.
+    
+Dado que $o=p/(1-p)$ (esta cantidad se conoce como *odds ratio*), despejando para $p$ se tiene que $o-op = p$ y por lo tanto $p = o/(1+o)$. Así, se tiene que 
+$$
+p = \textsf{Pr} ( St \mid Sh ) = \frac{0.5925926}{1+0.5925926}=  0.372093\,.
+$$
+        
+d. Alguien dice, "esa probabilidad no puede ser correcta: el 80\% de los estadísticos son tímidos, frente al 15\% de los economistas, por lo que su probabilidad de hablar con un estadístico debe ser superior al 50\%". Explique por qué esta línea de razonamiento es incorrecta y por qué $p$ debería ser menor del 50\%.
+    
+Esa línea de razonamiento es incorrecta porque las probabilidades se calculan bajo puntos de referencia diferentes. En el primer caso, es bajo la condición de la profesión, en el segundo bajo la condición de que es tímido. 
