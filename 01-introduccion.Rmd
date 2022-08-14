@@ -213,7 +213,7 @@ $\boldsymbol{\theta}$ es una **variable aleatoria**.
 
 La distribución posterior $p(\boldsymbol{\theta}\mid\boldsymbol{y})$ es función de $\boldsymbol{\theta}$ una vez que se observa $\boldsymbol{y}$. **R. Fisher** popularizó esta idea y la llamó **función de verosimilitud**, 
 $$
-\ell(\theta) = c\,p(\boldsymbol{y}\mid\boldsymbol{\theta}),
+\ell(\boldsymbol{\theta}\mid\boldsymbol{y}) = c\,p(\boldsymbol{y}\mid\boldsymbol{\theta}),
 $$ 
 donde $c$ es una constante positiva arbitraria. 
 
