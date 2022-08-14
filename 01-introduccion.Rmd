@@ -32,15 +32,15 @@ El **espacio de observaciones** es $\mathcal{Y} = \{0,\ldots,n\}$.
 
 # Distribución muestral (*sampling model*)
 
-**Distribución muestral $p(y\mid\theta)$: mecanismo aleatorio que caracteriza completamente cómo se genera $y$ dado un valor específico de $\theta$.**
+**Distribución muestral $p(y\mid\theta)$: Mecanismo aleatorio que caracteriza completamente cómo se genera $y$ dado un valor específico de $\theta$.**
 
 ## Ejemplo
 
-**Antes** de realizar el proceso de observación, $y$ es una **variable aleatoria** tal que 
+**Antes** de realizar el proceso de observación (analizar el fenómeno de interés), $y$ es una **variable aleatoria** tal que 
 $$
 y\mid\theta\sim\textsf{Binomial}(n,\theta)
 \qquad\Longleftrightarrow\qquad
-p(y\mid\theta) = \binom{n}{y}\theta^y(1-\theta)^{n-y}.
+p(y\mid\theta) = \binom{n}{y}\theta^y(1-\theta)^{n-y}
 $$
 para $y\in\mathcal{Y}$ y $\theta\in\Theta$.
 
@@ -52,13 +52,13 @@ theta <- seq(from = 0.05, to = 0.95, length = m)
 col <- viridis::inferno(round(1.5*m)) 
 par(mfrow = c(2,4), mar = c(3,3,1.5,1.5), mgp = c(1.75,0.75,0)) 
 for (i in 1:m) 
-  plot(x = 0:n, y = dbinom(x = 0:n, size = n, prob = theta[i]), type = "h", lwd = 4, col = col[i], xlab = "y", ylab = "Densidad", main = bquote(theta==.(round(theta[i],2))))
+  plot(x = 0:n, y = dbinom(x = 0:n, size = n, prob = theta[i]), type = "h", lwd = 4, col = col[i], xlab = "y", ylab = "Densidad", main = bquote(theta==.(round(theta[i],2))), ylim = c(0, 0.4))
 ```
 
 
 # Distribución previa (*prior distribution*)
 
-**Distribución previa $p(\theta)$: estado de información acerca de $\boldsymbol{\theta}$ antes de que se observen los datos $y$.** 
+**Distribución previa $p(\theta)$: Estado de información acerca de $\boldsymbol{\theta}$ antes de que se observen los datos $y$.** 
 
 $\theta$ es una **variable aleatoria**.
 
@@ -66,7 +66,7 @@ $\theta$ es una **variable aleatoria**.
 
 Otros estudios indican que la tasa de infección en ciudades similares oscila entre 0.05 y 0.20, con una prevalencia promedio de 0.10.
 
-Hay **infinitas distribuciones probabilísticas** que satisfacen estas condiciones. Se acostumbra a usar una distribución con una forma matemática conveniente.
+Hay **infinitas distribuciones probabilísticas** que satisfacen estas condiciones. Se acostumbra a usar una **distribución con una forma matemática conveniente**.
 
 Se representa la **información previa** (información externa) acerca de $\theta$ por medio de un miembro de la **familia de distribuciones Beta**, tal que
 $$
@@ -93,7 +93,7 @@ curve(expr = dbeta(x, shape1 = a, shape2 = b), from = 0, to = 1, n = 1000, col =
 
 # Distribución posterior (*posterior distribution*)
 
-**Distribución posterior $p(\theta\mid y)$: estado de información actualizado acerca de $\theta$ después de observar $y$.**
+**Distribución posterior $p(\theta\mid y)$: Estado de información actualizado acerca de $\theta$ después de observar $y$.**
 
 **Después** de realizar el proceso de observación, $y$ es una **cantidad fija**.
 
@@ -106,10 +106,7 @@ $$
 
 El teorema de Bayes indica **cómo debe cambiar Su estado de información** acerca de $\boldsymbol{\theta}$ bajo la luz de nueva información $\boldsymbol{y}$.
 
-```{r, eval = TRUE, echo=FALSE, out.width="90%", fig.pos = 'H', fig.align = 'center'}
-knitr::include_graphics("teorema_bayes.png")
-```
-
+**El Teorema de Bayes, haciendo intuitiva la Probabilidad** (3Blue1Brown): https://www.youtube.com/watch?v=HZGCoVF3YvM&t=814s&ab_channel=3Blue1Brown
 
 ## Ejemplo
 
@@ -157,14 +154,14 @@ y <- 0
 par(mfrow = c(1,1), mar = c(3,3,1.5,1.5), mgp = c(1.75,0.75,0))
 curve(expr = dbeta(x, shape1 = a+y, shape2 = b+n-y), from = 0, to = 1, n = 1000, col = 2, xlab = expression(theta), ylab = expression(paste("p","(",theta," | ",y,")",sep="")), main = "Posterior")
 curve(expr = dbeta(x, shape1 = a, shape2 = b), n = 1000, col = 4, add = T)
-legend("topright", legend = c("Posterior","Previa"), col = c(4,2), lty = 1, lwd = 2, bty = "n")
+legend("topright", legend = c("Posterior","Previa"), col = c(2,4), lty = 1, lwd = 2, bty = "n")
 ```
 
 
 
 # Probabilidad
 
-La **probabilidad** es una parte de las Matemáticas dedicada a la **cuantificación de la incertidumbre**.
+La **Teoría de la Probabilidad** es una parte de las Matemáticas dedicada a la **cuantificación de la incertidumbre**.
 
 **¡La evaluación de probabilidades es intrínsecamente subjetiva!**
 
@@ -214,9 +211,9 @@ Es posible considerar directamente la **información previa** (información exte
 
 $\boldsymbol{\theta}$ es una **variable aleatoria**.
 
-La distribución posterior $p(\boldsymbol{y}\mid\boldsymbol{\theta})$ es función de $\boldsymbol{\theta}$ una vez que se observa $\boldsymbol{y}$. **R. Fisher** popularizó esta idea y la llamó **función de verosimilitud**, 
+La distribución posterior $p(\boldsymbol{\theta}\mid\boldsymbol{y})$ es función de $\boldsymbol{\theta}$ una vez que se observa $\boldsymbol{y}$. **R. Fisher** popularizó esta idea y la llamó **función de verosimilitud**, 
 $$
-\ell(\theta\mid\boldsymbol{y}) = c\,p(\boldsymbol{y}\mid\boldsymbol{\theta}),
+\ell(\theta) = c\,p(\boldsymbol{y}\mid\boldsymbol{\theta}),
 $$ 
 donde $c$ es una constante positiva arbitraria. 
 
@@ -277,10 +274,10 @@ knitr::include_graphics("Hoffcoverbook.jpg")
 
 
 ```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
-knitr::include_graphics("Reichcoverbook.jpg")
+knitr::include_graphics("Gelmancoverbook.png")
 ```
 
 
 ```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
-knitr::include_graphics("Gelmancoverbook.png")
+knitr::include_graphics("Reichcoverbook.jpg")
 ```
