@@ -29,11 +29,11 @@ donde:
 - $p(\boldsymbol{\theta})$ caracteriza Sus creencias acerca de $\boldsymbol{\theta}$.
 - $p(\boldsymbol{y}\mid\boldsymbol{\theta})$ caracteriza Sus creencias acerca de $\boldsymbol{y}$ para cada $\boldsymbol{\theta}\in\Theta$.
 
-Una vez se ha observado $\boldsymbol{y}$, se calcula la \textbf{distribución posterior} de $\boldsymbol{\theta}$,
+Una vez se ha observado $\boldsymbol{y}$, se calcula la **distribución posterior** de $\boldsymbol{\theta}$,
 $$
 p(\boldsymbol{\theta}\mid \boldsymbol{y}) = \frac{p(\boldsymbol{\theta},\boldsymbol{y})}{p(\boldsymbol{y})} = \frac{p(\boldsymbol{y}\mid\boldsymbol{\theta})\,p(\boldsymbol{\theta})}{\int_\Theta p(\boldsymbol{y}\mid\boldsymbol{\theta})\,p(\boldsymbol{\theta})\,\text{d}\boldsymbol{\theta}}\propto p(\boldsymbol{y}\mid\boldsymbol{\theta})\,p(\boldsymbol{\theta})\,,
 $$
-que caracteriza Sus creencias \textit{actualizadas} acerca de $\boldsymbol{\theta}$, para $\boldsymbol{y}$ fijo.
+que caracteriza Sus creencias **actualizadas** acerca de $\boldsymbol{\theta}$, para $\boldsymbol{y}$ fijo.
 
 # Independencia condicional
 
@@ -66,7 +66,7 @@ $$
 
 # Intercambiabilidad
 
-Si Usted no tiene información relevante que distinga un individuo de otro, entonces Su incertidumbre acerca de las variables aleatorias $y_1,\ldots,y_n$ es **simétrica**, en el sentido de que cualquier permutación del orden en el que se etiqueten las variables deja Su incertidumbre sobre ellas sin cambios.
+Si Usted no tiene información relevante que distinga un individuo de otro, entonces **Su incertidumbre** acerca de las variables aleatorias $y_1,\ldots,y_n$ es **simétrica**, en el sentido de que cualquier permutación del orden en el que se etiqueten las variables deja Su incertidumbre sobre ellas sin cambios.
 
 **(Definición.)** Sea $p(y_1,\ldots,y_n)$ la distribución marginal conjunta de $y_1,\ldots,y_n$. Si 
 $$
@@ -78,7 +78,7 @@ Las variables aleatorias $y_1,\ldots,y_n$ se denominan intercambiables si los **
 
 **El mundo no es intercambiable**, lo que es intercambiable es Su estado de información acerca del mundo.
 
-**(Proposición.)** Si las variables aleatorias $y_1,\ldots,y_n$ son condicionalmente independientes dato $\boldsymbol{\theta}$, entonces $y_1,\ldots,y_n$ son intercambiables. 
+**(Proposición.)** Si las variables aleatorias $y_1,\ldots,y_n$ son condicionalmente independientes dado $\boldsymbol{\theta}$, entonces $y_1,\ldots,y_n$ son intercambiables. 
 
 # Teorema de representación de de Finetti
 
@@ -102,6 +102,6 @@ $$
 
 **Los modelos Bayesianos son intrínsecamente jerárquicos**.
 
-Aunque en la práctica Usted solo va a observar $y_1,\ldots,y_n$, el teorema de de Finetti requiere **extender la intercambiabilidad finita a una secuencia infinita numerable** $y_1,y_2,\ldots$, lo que equivale a considerar $y_1,\ldots,y_n$ como una \textbf{muestra aleatoria} de una \textit{población} $y_1,y_2,\ldots$. 
+Aunque en la práctica Usted solo va a observar $y_1,\ldots,y_n$, el teorema de de Finetti requiere **extender la intercambiabilidad finita a una secuencia infinita numerable** $y_1,y_2,\ldots$, lo que equivale a considerar $y_1,\ldots,y_n$ como una **muestra aleatoria** de una **población** $y_1,y_2,\ldots$. 
 
 La dificultad surge con la falta de claridad sobre el **alcance de la generalización** a partir de un conjunto de datos, lo cual constituye un **problema científico fundamental** tanto desde el punto de vista Frecuentista como Bayesiano.
