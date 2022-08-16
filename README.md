@@ -13,3 +13,5 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 - Taller 1.
 
 ## Data
+
+- VictimasVS-1231221.txt
