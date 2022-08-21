@@ -7,6 +7,7 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 1. Introducción.
 2. Intercambiabilidad.
 3. Modelo Binomial.
+4. Modelo Poisson.
 
 ## Talleres
 
@@ -15,3 +16,4 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 ## Data
 
 - VictimasVS-1231221.txt
+- CNPV2018_5PER_A2_11_muestra.txt
