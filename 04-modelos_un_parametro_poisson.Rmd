@@ -2,10 +2,11 @@
 title: "Modelo Poisson"
 author: 
 - Juan Sosa PhD
-- Webpage https://sites.google.com/view/juansosa/ 
-- YouTube https://www.youtube.com/c/JuanSosa1702 
+- Email   jcsosam@unal.edu.co
 - GitHub  https://github.com/jstats1702 
-- Rpubs   https://rpubs.com/jstats1702
+- Samuel Sánchez (revisión R y Python)
+- Email   ssanchezgu@unal.edu.co
+- GitHub  https://github.com/Samuel-col
 date: ""
 output:
   html_document:
@@ -40,7 +41,7 @@ $$
 $$
 donde $s = \sum_{i=1}^n y_i$, lo cual indica que $s$ es un **estadístico suficiente** para $\theta$.
 
-Por lo tanto la distribución posterior es
+Por lo tanto la **distribución posterior** es
 $$
 p(\theta\mid\boldsymbol{y}) \propto \theta^{s}e^{-n\theta}p(\theta)\,.
 $$
@@ -82,7 +83,7 @@ la cual es un **promedio ponderado** del valor esperado previo y la media muestr
     - $a$ = suma de conteos asociados con $b$ observaciones previas.
     - Si $n>>b$, entonces la mayoría de la información sobre $\theta$ proviene de los datos en lugar de la información previa.
 
-También, la **distribución predictiva posterior** es **Binomial Negativa** con parámeros $a+s$ y $b+n$, i.e., $y^*\mid \boldsymbol{y}\sim \textsf{BN}(a+s,b+n)$:
+También, la **distribución predictiva posterior** es **Binomial Negativa** con parámetros $a+s$ y $b+n$, i.e., $y^*\mid \boldsymbol{y}\sim \textsf{BN}(a+s,b+n)$:
 $$
 p(y^*\mid \boldsymbol{y}) = \frac{\Gamma(y^* +a+s)}{\Gamma(a+s)\Gamma(y^*+1)}\left[\frac{b+n}{b+n+1}\right]^{a+s} \left[\frac{1}{b+n+1}\right]^{y^*}\,,\quad y^*=0,1,\,\ldots.
 $$
@@ -308,6 +309,7 @@ cv_F1  <- sqrt(sd1^2/n1 + sd2^2/n2)/(yb1 - yb2)
 ic_F1  <- yb1 - yb2 + c(-1,1)*qnorm(p = 0.975)*sqrt(sd1^2/n1 + sd2^2/n2)
 # inferencia frecuentista (boostrap)
 out <- NULL
+set.seed(123)
 for (i in 1:10000) {
   yy1 <- sample(x = y1, size = n1, replace = T)
   yy2 <- sample(x = y2, size = n2, replace = T)
