@@ -2,10 +2,11 @@
 title: "Métodos de Monte Carlo"
 author: 
 - Juan Sosa PhD
-- Webpage https://sites.google.com/view/juansosa/ 
-- YouTube https://www.youtube.com/c/JuanSosa1702 
+- Email   jcsosam@unal.edu.co
 - GitHub  https://github.com/jstats1702 
-- Rpubs   https://rpubs.com/jstats1702
+- Samuel Sánchez (revisión R y Python)
+- Email   ssanchezgu@unal.edu.co
+- GitHub  https://github.com/Samuel-col
 date: ""
 output:
   html_document:
