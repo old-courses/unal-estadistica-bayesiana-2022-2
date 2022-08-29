@@ -64,9 +64,9 @@ $$
 
 La **distribución empírica** de $\theta^{(1)},\ldots,\theta^{(B)}$ **aproxima** la **distribución posterior** $p(\theta\mid \boldsymbol{y})$ y tal aproximación puede ser **tan precisa como se quiera** incrementando el valor de $B$. Esta aproximación se conoce como la **aproximación de Monte Carlo** de $p(\theta\mid \boldsymbol{y})$. 
 
-**(Ley débil de los grandes números).** Sea $X_1,\ldots,X_n$ una secuencia de variables aleatorias independientes e idénticamente distribuidas con media $\mu$ y varianza finita $\sigma^2$. Entonces, el promedio muestral $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ **converge en probabilidad** a $\mu$ cuando $n\rightarrow\infty$, i.e., para todo $\epsilon > 0$ se tiene que
+**(Ley débil de los grandes números).** Sea $X_1,\ldots,X_n$ una secuencia de variables aleatorias independientes e idénticamente distribuidas con media $\mu$ y varianza finita $\sigma^2$. Entonces, el promedio muestral $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ **converge en probabilidad** a $\mu$ cuando $n\rightarrow\infty$, i.e., para todo $\epsilon > 0$ se tiene que
 $$
-\lim\limits_{n\to\infty}\textsf{Pr}(|\bar{X} - \mu| > \epsilon) = 0\,.
+\lim\limits_{n\to\infty}\textsf{Pr}(|\bar{X}_n - \mu| > \epsilon) = 0\,.
 $$
 
 La **ley débil de los grandes números** garantiza que, si $\theta^{(1)},\ldots,\theta^{(B)}\stackrel{\text{iid}}{\sim} p(\theta\mid \boldsymbol{y})$, entonces
