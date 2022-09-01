@@ -1,0 +1,634 @@
+---
+title: "Taller 3"
+author: 
+- Juan Sosa PhD
+- Webpage https://sites.google.com/view/juansosa/ 
+- YouTube https://www.youtube.com/c/JuanSosa1702 
+- GitHub  https://github.com/jstats1702 
+- Rpubs   https://rpubs.com/jstats1702
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. La siguiente tabla muestra el número de accidentes mortales por año asociados con aerolíneas en todo el mundo durante un período de diez años (Fuente: *Statistical Abstract of the United States*). Suponga que el número de accidentes mortales en cada año son condicionalmente independientes y siguen una distribución Poisson con parámetro $\theta$. Establezca una distribución previa para $\theta$ y determine la distribución posterior con base en los datos de 1976 a 1985. Bajo este modelo, calcule un intervalo predictivo al 95% para el número de accidentes fatales en 1986.
+
+
+| Año  | Accidentes mortales |
+|:----:|:-------------------:|
+|	1976 | 24                  |
+|	1977 | 25                  |
+|	1978 | 31                  |
+|	1979 | 31                  |
+|	1980 | 22                  | 
+|	1981 | 21                  | 
+|	1982 | 26                  | 
+|	1983 | 20                  | 
+|	1984 | 16                  | 
+|	1985 | 22                  |
+
+2. Un laboratorio está estimando la tasa de *tumorigenesis* en dos cepas de ratones, A y B. Los ratones tipo A han sido bien estudiados e información de otros laboratorios sugiere que los ratones tipo A tienen conteos de tumores que siguen una distribución de Poisson con media $\theta_A = 12$. Se desconoce la tasa promedio de los tumores para los ratones tipo B, $\theta_B$, pero existe suficiente evidencia empírica para asegurar que los ratones tipo B están relacionados con los ratones tipo A. Los conteos de tumores observados para las dos cepas de ratones son
+$\boldsymbol{y}_A = (12, 9, 12, 14, 13, 13, 15, 8, 15, 6)$ y $\boldsymbol{y}_B = (11, 11, 10, 9, 9, 8, 7, 10, 6, 8, 8, 9, 7)$.
+
+a. Encuentre las distribuciones posteriores, las medias posteriores, las varianzas posteriores y los intervalos de credibilidad del 95\% para $\theta_A$ y $\theta_B$, asumiendo modelos Gamma-Poisson independientes para cada grupo, con distribuciones previas $\theta_A\sim\textsf{Gamma}(120,10)$ y $\theta_B\sim\textsf{Gamma}(12,1)$. ¿Por qué estas distribuciones previas son razonables?
+
+b. Calcule y grafique la media posterior de $\theta_B$ bajo la distribución previa $\theta_B\sim \textsf{Gamma}(12m,m)$, para cada valor de $m\in\{1, 2,\ldots,50\}$. Describa qué tipo de información previa sobre $\theta_B$ sería necesaria para que la media posterior de $\theta_B$ sea cercana a la de $\theta_A$.
+
+3. Muestre que bajo el modelo Gamma-Poisson $y_i\mid\theta\stackrel{\text{iid}}{\sim}\textsf{Poisson}(\theta)$, para $i = 1,\ldots,n$, con $\theta \sim \textsf{Gamma}(a,b)$,
+se tiene que la distribución predictiva posterior es Binomial Negativa con parámetros $a+s$ y $b+n$, donde $s=\sum_{i=1}^n y_i$.
+
+4. Considere el modelo Gamma-Poisson $y_i\mid\theta\stackrel{\text{iid}}{\sim}\textsf{Poisson}(\theta)$, para $i = 1,\ldots,n$, con $\theta \sim \textsf{Gamma}(\alpha,\beta)$, y la función de perdida cuadrática $L(\theta,\theta^*)=(\theta-\theta^*)^2$.
+
+a. Muestre que el estimador que minimiza la perdida esperada posterior es de la forma $\hat\theta = a + b\,\bar{y}$, donde $a > 0$, $b \in (0, 1)$ y $\bar{y}=\frac{1}{n}\sum_{i=1}^n y_i$.
+b. Calcule el riesgo frecuentista tanto de $\hat\theta$ como del estimador de máxima verosimilitud.
+c. Calcule el riesgo Bayesiano de $\hat\theta$.
+d. Suponga que un investigador quiere recolectar una muestra lo suficientemente grande para que el riesgo Bayesiano después del experimento sea la mitad del riesgo Bayesiano antes del experimento. Encuentre ese tamaño de muestra.
+
+5. Considere el modelo Beta-Binomial $x\mid\theta\sim \textsf{Bin}(n,\theta)$ con $n$ conocido, y $\theta\sim \textsf{Beta}(\sqrt{n}/2,\sqrt{n}/2)$.
+
+a. ¿Cuál es la distribución posterior?
+b. ¿Cuál es el estimador que minimiza la perdida esperada posterior si la función de perdida es $L(\theta,\hat\theta)=(\theta-\hat\theta)^2$? Llame tal estimador $\hat{\theta}$ y muestre que el riesgo frecuentista correspondiente es constante.
+c. Sea $\theta_0=x/n$. Encuentre el riesgo frecuentista de este estimador. Compare los riesgos de $\hat{\theta}$ y $\theta_0$, para $n=10,50,100$. ¿Qué se puede concluir?
+
+6. Sea $x\sim \textsf{Bin}(n,\theta)$ con $n$ conocido, y $\theta \sim \textsf{Beta}(\alpha,\beta)$. Considere la función de perdida $L(\theta,\hat\theta)=(\theta-\hat\theta)/(\theta(1-\theta))$. Encuentre el estimador que minimiza la perdida esperada posterior para esta función de perdida.
+
+7. Sea $L(\theta,\hat\theta) = \omega(\theta)(\theta - \hat\theta)^2$ la función de perdida cuadrática ponderada, donde $\omega(\theta)$ es una función no negativa. Muestre que el estimador que minimiza la perdida esperada posterior tiene la forma
+$$
+\hat\theta=\frac{\textsf{E}(\omega(\theta)\,\theta\mid \boldsymbol{y})}{\textsf{E}(\omega(\theta)\mid \boldsymbol{y})}\,.
+$$
+
+# Solución {-}
+
+
+1. La siguiente tabla muestra el número de accidentes mortales por año asociados con aerolíneas en todo el mundo durante un período de diez años (Fuente: *Statistical Abstract of the United States*). Suponga que el número de accidentes mortales en cada año son condicionalmente independientes y siguen una distribución Poisson con parámetro $\theta$. Establezca una distribución previa para $\theta$ y determine la distribución posterior con base en los datos de 1976 a 1985. Bajo este modelo, calcule un intervalo predictivo al 95% para el número de accidentes fatales en 1986.
+
+
+| Año  | Accidentes mortales |
+|:----:|:-------------------:|
+|	1976 | 24                  |
+|	1977 | 25                  |
+|	1978 | 31                  |
+|	1979 | 31                  |
+|	1980 | 22                  | 
+|	1981 | 21                  | 
+|	1982 | 26                  | 
+|	1983 | 20                  | 
+|	1984 | 16                  | 
+|	1985 | 22                  |
+
+Sea $y_i$ el número de accidentes mortales en el año $i$ para $i=1,\ldots,n$, donde el año $i=1$ corresponde a 1976, el año $i=2$ a 1977, etc. Asumiendo que el número de accidentes mortales en cada año son condicionalmente independientes y siguen una distribución Poisson con parámetro $\theta$, se tiene que $y_i\mid\theta\stackrel{\text{iid}}{\sim}\textsf{Poisson}(\theta)$. Así, se considera una distribución previa conjuga para $\theta$ de la forma $\theta\sim\textsf{Gamma}(a,b)$ con $a=1$ y $b=1$. Esta previa es una distribución previa razonable ya que es aproximadamente constante para $\theta > 10$ (en este contexto es aceptable asumir que la tasa promedio del número de accidentes mortales será considerablemente superior a 10), aunque se encuentre concentrada débilmente al rededor de 1 pues $\textsf{E}(\theta)=1$ y $\textsf{CV}(\theta) = 1$ (otra manera de haber construido la previa consistiría en elegir $a$ y $b$ tales que $\textsf{E}(\theta)=\bar{y}=\frac{1}{n}\sum_{i=1}^n y_i$ y $\textsf{CV}(\theta) = 1$; aunque estrictamente esto no es válido porque se están usando los datos para estipular el estado de conocimiento anterior al proceso de observación, hay una rama de la estadística Bayesiana denominada Bayes Empírico [*empirical Bayes*] que construye las distribuciones previas de esta manera).
+
+```{r}
+# hiperparametros
+a <- 1
+b <- 1
+# previa
+par(mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+curve(expr = dgamma(x, shape = a, rate = b), from = 0, to = 40, n = 1000, lwd = 2, 
+      xlab = expression(theta), ylab = "Densidad", main = "Distr. Previa")
+```
+
+Así, la distribución posterior es $\theta\mid\boldsymbol{y}\sim\textsf{Gamma}(a+s,b+n)$, donde $\boldsymbol{y}=(y_1,\ldots, y_n)$ es el conjunto de datos observado y $s=\sum_{i=1}^n y_i$ es el estadístico suficiente correspondiente. En este caso, $n=10$ y $s=238$ y en consecuencia, $\theta\mid\boldsymbol{y}\sim\textsf{Gamma}(239,11)$. Luego, la estimación puntual de $\theta$ es $\hat\theta=\textsf{E}(\theta\mid\boldsymbol{y}) = 21.727$ y el intervalo de credibilidad correspondiente al 95\% es $(19.060\,;\,24.567)$.
+
+```{r, fig.height=5, fig.width=12}
+# datos
+y <- c(24, 25, 31, 31, 22, 21, 26, 20, 16, 22)
+n <- length(y)
+print(n)
+# estadistico suficiente
+s <- sum(y)
+print(s)
+# posterior
+ap <- a + s
+print(ap)
+bp <- b + n
+print(bp)
+# grafico
+par(mfrow = c(1,2), mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+curve(expr = dgamma(x, shape = ap, rate = bp), from = 0, to = 40, n = 1000, lwd = 2, col = 4, 
+      xlab = expression(theta), ylab = "Densidad", main = "Distr. posterior")
+curve(expr = dgamma(x, shape = a, rate = b), n = 1000, add = T)
+legend("topright", legend = c("Posterior","Previa"), col = c(1,4), lwd = 2, bty = "n")
+# 
+curve(expr = dgamma(x, shape = ap, rate = bp), from = 16, to = 28, n = 1000, lwd = 2, col = 4, 
+      xlab = expression(theta), ylab = "Densidad", main = "Distr. posterior")
+curve(expr = dgamma(x, shape = a, rate = b), n = 1000, add = T)
+abline(v = ap/bp, lwd = 2, lty = 2, col = 2)
+abline(v = qgamma(p = c(0.025, 0.975), shape = ap, rate = bp), lwd = 2, lty = 3, col = 3)
+legend("topright", legend = c("Media","IC 95%"), col = c(2,3), lwd = 2, bty = "n")
+```
+
+```{r}
+# estimacion puntual
+round(ap/bp, 3)
+# intervalo de creidibilidad al 95%
+round(qgamma(p = c(0.025, 0.975), shape = ap, rate = bp), 3)
+```
+Finalmente, un análisis de sensibilidad muestra que los resultados no cambian radicalmente al usar la previa difusa $a=1$ y $b=1$ (i.e., $\textsf{E}(\theta)=1$ y $\textsf{CV}(\theta) = 1$ con densidad aproximadamente uniforme para $\theta > 10$) en comparación la previa empírica $a=1$ y $b=1/\bar{y}=0.042$ (i.e., $\textsf{E}(\theta)=\bar{y}=23.8$ y $\textsf{CV}(\theta) = 1$). La siguiente tabla muestra la estimación puntual de $\theta$ junto con el intervalo de credibilidad correspondiente al 95\%, utilizando estas dos distribuciones previas (la previa de Jeffreys sería otra alternativa para llevar acabo el análisis de sensibilidad). 
+
+```{r}
+# previa difusa (previa 1)
+a1 <- 1
+b1 <- 1
+# previa empirica (previa 2)
+a2 <- 1
+b2 <- 1/mean(y)
+# posterior usando previa difusa
+ap1 <- a1 + s
+bp1 <- b1 + n
+# posterior usando previa empirica
+ap2 <- a2 + s
+bp2 <- b2 + n
+# inferencia
+tab <- rbind(c(ap1/bp1, qgamma(p = c(0.025, 0.975), shape = ap1, rate = bp1)), 
+             c(ap2/bp2, qgamma(p = c(0.025, 0.975), shape = ap2, rate = bp2)))
+rownames(tab) <- c("Previa difusa","Previa empírica")
+colnames(tab) <- c("Estimación","Q2.5%","Q97.5%")
+knitr::kable(x = tab, digits = 3)
+```
+
+2. Un laboratorio está estimando la tasa de *tumorigenesis* en dos cepas de ratones, A y B. Los ratones tipo A han sido bien estudiados e información de otros laboratorios sugiere que los ratones tipo A tienen conteos de tumores que siguen una distribución de Poisson con media $\theta_A = 12$. Se desconoce la tasa promedio de los tumores para los ratones tipo B, $\theta_B$, pero existe suficiente evidencia empírica para asegurar que los ratones tipo B están relacionados con los ratones tipo A. Los conteos de tumores observados para las dos cepas de ratones son
+$\boldsymbol{y}_A = (12, 9, 12, 14, 13, 13, 15, 8, 15, 6)$ y $\boldsymbol{y}_B = (11, 11, 10, 9, 9, 8, 7, 10, 6, 8, 8, 9, 7)$.
+
+```{r, eval = TRUE, echo=FALSE, out.width="95%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("tumorigenesis.png")
+```
+
+Imagen tomada de **Meiliana, A., Dewi, N. M., & Wijaya, A. (2016). Cancer stem cell hypothesis: implication for cancer prevention and treatment. The Indonesian Biomedical Journal, 8(1), 21-36.**
+
+a. Encuentre las distribuciones posteriores, las medias posteriores, las varianzas posteriores y los intervalos de credibilidad del 95\% para $\theta_A$ y $\theta_B$, asumiendo modelos Gamma-Poisson independientes para cada grupo, con distribuciones previas $\theta_A\sim\textsf{Gamma}(120,10)$ y $\theta_B\sim\textsf{Gamma}(12,1)$. ¿Por qué estas distribuciones previas son razonables?
+
+Estas distribuciones previas son razonables porque están centradas al rededor de 12 unidades dado que
+$\textsf{E}(\theta_A) = 120/10 = 12$ y $\textsf{E}(\theta_B) = 12/1 = 12$ (la evidencia empírica indica que los ratones tipo A han sido bien estudiados y tienen media 12 y los ratones tipo B están relacionados con los ratones tipo A). La diferencia radica en el grado de concentración de las densidades a priori al rededor de 12, pues $\textsf{CV}(\theta_A)=1/\sqrt{120}\approx 9\%$ mientras que $\textsf{CV}(\theta_B)=1/\sqrt{12}\approx 29\%$. Esto último concuerda con el estado de información externa al conjunto de datos de acuerdo con el contexto del problema, porque estamos más seguros acerca de la evidencia previa acerca de los ratones tipo A en comparación con los ratones tipo B.
+
+```{r, fig.height = 4, fig.width = 6}
+# grafico
+par(mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+curve(expr = dgamma(x, shape = 120, rate = 10), from = 0, to = 25, n = 1000, col = 2, lwd = 1, ylim = c(0,0.5), xlab = expression(theta), ylab = "Densidad", main = "Distr. Previa")
+curve(expr = dgamma(x, shape = 12, rate = 1), n = 1000, col = 4, lwd = 1, add = TRUE)
+abline(v = 12, lty = 2)
+legend("topright", legend = c("Tipo A", "Tipo B"), col = c(2, 4), lty = 1, lwd = 2, bty = "n")
+```
+
+Así, la distribución posterior en ambos casos es tipo Gamma. En particular, se tiene que las distribuciones posteriores correspondientes son $\theta_A\mid\boldsymbol{y}_A\sim\textsf{Gamma}(237,20)$ y $\theta_B\mid\boldsymbol{y}_B\sim\textsf{Gamma}(125,14)$.
+
+```{r}
+# datos
+yA <- c(12, 9, 12, 14, 13, 13, 15, 8, 15, 6)
+yB <- c(11, 11, 10, 9, 9, 8, 7, 10, 6, 8, 8, 9, 7)
+# tamaños
+nA <- length(yA)
+nB <- length(yB)
+# estadistico suficiente
+sA <- sum(yA)
+sB <- sum(yB)
+# previa
+aA <- 120
+bA <- 10
+aB <- 12
+bB <- 1
+# posterior
+apA <- aA + sA
+bpA <- bA + nA
+print(c(apA, bpA))
+apB <- aB + sB
+bpB <- bB + nB
+print(c(apB, bpB))
+```
+
+Por tal motivo las medias posteriores, las varianzas posteriores, y los intervalos de credibilidad correspondientes al 95\% son los que se presentan en la tabla a continuación.
+
+```{r}
+# inferencia
+tab <- rbind(c(apA/bpA, apA/bpA^2, qgamma(p = c(0.025, 0.975), shape = apA, rate = bpA)), 
+             c(apB/bpB, apB/bpB^2, qgamma(p = c(0.025, 0.975), shape = apB, rate = bpB)))
+rownames(tab) <- c("Tipo A","Tipo B")
+colnames(tab) <- c("Media","Varianza","Q2.5%","Q97.5%")
+knitr::kable(x = tab, digits = 3)
+```
+
+```{r}
+# grafico
+par(mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+# tipo A
+curve(expr = dgamma(x, shape = apA, rate = bpA), from = 0, to = 25, n = 1000, col = 2, lwd = 2, ylim = c(0,0.5), xlab = expression(theta), ylab = "Densidad", main = "")
+curve(expr = dgamma(x, shape = aA,  rate = bA),  n = 1000, col = 2, lwd = 1, lty = 2, add = TRUE)
+curve(expr = dgamma(x, shape = apB, rate = bpB), n = 1000, col = 4, lwd = 2, lty = 1, add = TRUE)
+curve(expr = dgamma(x, shape = aB,  rate = bB),  n = 1000, col = 4, lwd = 1, lty = 2, add = TRUE)
+legend("topright", legend = c("Posterior A","Posterior B","Previa A","Previa B"), col = c(2,4,2,4), lty = c(1,1,2,2), lwd = c(2,3,1,1), bty = "n")
+```
+
+
+b. Calcule y grafique la media posterior de $\theta_B$ bajo la distribución previa $\theta_B\sim \textsf{Gamma}(12m,m)$, para cada valor de $m\in\{1, 2,\ldots,50\}$. Describa qué tipo de información previa sobre $\theta_B$ sería necesaria para que la media posterior de $\theta_B$ sea cercana a la de $\theta_A$.
+
+Como se evidencia en las Figuras, la información previa sobre $\theta_B$ para que $\textsf{E}(\theta_B\mid\boldsymbol{y}_B)$ sea cercana a $\textsf{E}(\theta_A\mid\boldsymbol{y}_A)=11.850$ (línea en color negro) debe ser muy informativa al rededor de $\textsf{E}(\theta_B)=12m/m=12$, lo cual se logra incrementando el valor de $m$, de forma que $\textsf{Var}(\theta_B)=12m/m^2=12/m$ decrezca haciendo que la información previa sea mas fuerte. 
+
+```{r}
+# grafico
+mgrid <- c(1,8,15,25,50)
+col <- RColorBrewer::brewer.pal(n = 9, name = "Set1")
+par(mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+plot(NA, NA, xlim = c(6,14), ylim = c(0,1), xlab = expression(theta), ylab = "Densidad posterior", main = "Tipo B")
+for (j in 1:length(mgrid)) {
+  curve(expr = dgamma(x, shape = 12*mgrid[j] + sB, rate = 1*mgrid[j] + nB),  n = 1000, col = col[j], lwd = 2, lty = 1, add = TRUE)
+  abline(v = (12*mgrid[j] + sB)/(1*mgrid[j] + nB), lty = 2,  col = col[j])
+}
+abline(v = (12 + sA)/(1 + nA), lty = 1)
+legend("topright", legend = c(paste0("m = ", mgrid), "Media post. A"), col = c(col[1:length(mgrid)], "black"), lty = 1, lwd = 2, bty = "n")
+```
+
+```{r, fig.width=10, fig.height=5}
+mgrid <- 1:50
+mmean <- (12*mgrid + sB)/(1*mgrid + nB)
+mvar  <- (12*mgrid + sB)/(1*mgrid + nB)^2
+par(mfrow = c(1,2), mar = c(3,3,1.4,1.4), mgp = c(1.75,.75,0))
+# media 
+plot(x = mgrid, y = mmean, type = "p", pch = 18, cex = 0.8, ylim = c(9, 12), xlab = "m", ylab = "Media posterior", main = "Tipo B")
+abline(h = (12 + sA)/(1 + nA), lty = 1)
+# cv
+plot(x = mgrid, y = sqrt(mvar)/mmean, type = "p", pch = 18, cex = 0.8, xlab = "m", ylab = "CV posterior", main = "Tipo B")
+
+```
+
+3. Muestre que bajo el modelo Gamma-Poisson $y_i\mid\theta\stackrel{\text{iid}}{\sim}\textsf{Poisson}(\theta)$, para $i = 1,\ldots,n$, con $\theta \sim \textsf{Gamma}(a,b)$,
+se tiene que la distribución predictiva posterior es Binomial Negativa con parámetros $a+s$ y $b+n$, donde $s=\sum_{i=1}^n y_i$.
+
+En este caso, se tiene que la distribución predictiva posterior está dada por:
+$$
+\begin{align*}
+p(y^*\mid\boldsymbol{y}) &= \int_{\Theta} p(y^*\mid\theta)\,p(\theta\mid\boldsymbol{y})\,\text{d}\theta\\
+&= \int_0^\infty \frac{e^{-\theta}\theta^{y*}}{y^*!}\,\frac{(b+n)^{a+s}}{\Gamma(a+s)}\,\theta^{a+s-1}e^{-(b+n)\theta}\,\textsf{d}\theta\\
+&= \frac{(b+n)^{a+s}}{\Gamma(a+s)}\,\frac{1}{y^*!}\int_0^\infty \theta^{y^*+a+s-1}e^{-(b+n+1)\theta}\,\textsf{d}\theta\\
+&= \frac{(b+n)^{a+s}}{\Gamma(a+s)}\,\frac{1}{y^*!}\,\frac{\Gamma(y^*+a+s)}{(b+n+1)^{y^*+a+s}}\\
+&= \frac{\Gamma(y^*+a+s)}{\Gamma(a+s)\,\Gamma(y^*+1)}\,\frac{(b+n)^{a+s}}{(b+n+1)^{y^*+a+s}}\\
+&= \frac{\Gamma(y^*+a+s)}{\Gamma(a+s)\,\Gamma(y^*+1)}\,\left(\frac{b+n}{b+n+1}\right)^{a+s}\,\left(\frac{1}{b+n+1}\right)^{y^*}
+\end{align*}
+$$
+donde $\Theta=(0,\infty)$ es el espacio de parámetros y $\boldsymbol{y}=(y_1,\ldots,y_n)$ es el vector de observaciones, $s=\sum_{i=1}^n y_i$ un estadístico suficiente para $\theta$, y $n$ es el tamaño de la muestra. Por lo tanto, la distribución predictiva posterior resulta ser Binomial Negativa con parámetros $a+s$ y $b+n$.
+
+4. Considere el modelo Gamma-Poisson $y_i\mid\theta\stackrel{\text{iid}}{\sim}\textsf{Poisson}(\theta)$, para $i = 1,\ldots,n$, con $\theta \sim \textsf{Gamma}(\alpha,\beta)$, y la función de perdida cuadrática $L(\theta,\theta^*)=(\theta-\theta^*)^2$.
+
+a. Muestre que el estimador que minimiza la perdida esperada posterior es de la forma $\hat\theta = a + b\,\bar{y}$, donde $a > 0$, $b \in (0, 1)$ y $\bar{y}=\frac{1}{n}\sum_{i=1}^n y_i$.
+
+La distribución posterior es
+$$
+\begin{align*}
+    p(\theta\mid\boldsymbol{y}) &\propto p(\boldsymbol{y}\mid\theta)\,p(\theta)\\
+    &\propto \prod_{i=1}^n \frac{e^{-\theta}\theta^{y_i}}{y_i!} \times \frac{\beta^\alpha}{\Gamma(\alpha)}\,\theta^{\alpha-1}\, e^{-\beta\theta}\\
+    &\propto \theta^{\alpha+s -1}\,e^{-(\beta+n)\theta}
+\end{align*}
+$$
+donde $s=\sum_{i=1}^n y_i$. Entonces, $\theta\mid \boldsymbol{y}\sim \textsf{Gamma}(\alpha+s,\beta+n)$.
+
+Si la función de pérdida es la función de pérdida cuadrática, entonces el estimador que minimiza la pérdida posterior esperada es la media posterior. Así, se tiene que
+$$
+\hat{\theta}=\hat{\theta}(\boldsymbol{y})=\textsf{E}(\theta\mid\boldsymbol{y})=\frac{\alpha+s}{\beta+n} =\frac{\alpha}{\beta+n}+\frac{n}{\beta+n}\frac{s}{n}
+$$
+y por lo tanto, $\hat{\theta}=a+b\bar{y}$, donde $a=\alpha/(\beta+n)$, $b=n/(\beta+n)$, y $\bar{y}=\frac{s}{n}$. Como $\alpha,\beta,n>0$, entonces $a>0$ y $b\in (0,1)$.
+
+b. Calcule el riesgo frecuentista tanto de $\hat\theta$ como del estimador de máxima verosimilitud.
+
+El riesgo frecuentista $R_{\textsf{F}}(\theta,\hat\theta)$ es
+$$
+R_{\textsf{F}}(\theta,\hat\theta) = \textsf{E}_{\boldsymbol{y}\mid\theta}(L(\theta,\hat\theta)) = \textsf{E}_{\boldsymbol{y}\mid\theta}((\theta-\hat\theta)^2)
+$$
+el cual corresponde al error cuadrático medio (MSE, por sus siglas en inglés) evaluado en $\hat\theta$, i.e,
+$$
+\begin{align*}
+R_{\textsf{F}}(\theta,\hat\theta) &= \textsf{MSE}(\hat\theta)\\
+&= \textsf{Var}_{\boldsymbol{y}\mid\theta}(\hat\theta) + \left(\textsf{E}_{\boldsymbol{y}\mid\theta}(\hat\theta) - \theta\right)^2\\
+&= \textsf{Var}_{\boldsymbol{y}\mid\theta}(a+b\bar{y}) + \left(\textsf{E}_{\boldsymbol{y}\mid\theta}(a+b\bar{y}) - \theta\right)^2\\
+&= b^2\textsf{Var}_{\boldsymbol{y}\mid\theta}(\bar{y})+ \left(a+b\textsf{E}_{\boldsymbol{y}\mid\theta}(\bar{y}) - \theta\right)^2\\
+&= b^2\frac{n\theta}{n^2}+ \left(a+b\frac{n\theta}{n} - \theta\right)^2\\
+&= b^2\frac{\theta}{n}+ \left(a+(b-1)\theta \right)^2\\
+&= (b-1)^2\theta^2 + \left(\frac{b^2}{n}+2a(b-1)\right)\theta + a^2\\
+&=c_1\theta^2 + c_2\theta + c_3
+\end{align*}
+$$
+donde $c_1=(b-1)^2$, $c_2= \frac{b^2}{n}+2a(b-1)$, y $c_3=a^2$. Después de algo de álgebra, se obtiene que
+$$
+\begin{align*}
+&c_1=(b-1)^2=\left(\frac{n}{\beta + n}-1\right)^2\quad\Rightarrow\quad c_1=\frac{\beta^2}{(\beta+n)^2}\\ 
+&c_2=\frac{b^2}{n}+2a(b-1)=\frac{\left(\frac{n}{\beta+n}\right)^2}{n}+2\frac{\alpha}{\beta+n}\left(\frac{n}{\beta+n}-1\right)
+\quad\Rightarrow\quad c_2=\frac{n-2\alpha\beta}{(\beta+n)^2}\\
+&c_3=\left(\frac{\alpha}{\beta+n}\right)^2\quad\Rightarrow\quad c_3=\frac{\alpha^2}{(\beta+n)^2}
+\end{align*}
+$$
+
+De otra parte, se demuestra que el estimador de máxima verosimilitud (MLE, por sus siglas en inglés) es  $\hat{ \theta }_{ \text{MLE} } = \bar{y}$ (¡ejercicio!).
+
+Así, se tiene que le riesgo frecuentista de $\hat{ \theta }_{ \text{MLE} }$ es
+$$
+\begin{align*}
+R_{\textsf{F}}(\theta,\hat{ \theta }_{ \text{MLE} }) &= \textsf{MSE}(\hat{ \theta }_{ \text{MLE} })\\
+&= \textsf{Var}_{\boldsymbol{y}\mid\theta}(\hat{ \theta }_{ \text{MLE} }) + \left(\textsf{E}_{\boldsymbol{y}\mid\theta}(\hat{ \theta }_{ \text{MLE} }) - \theta\right)^2\\
+&= \textsf{Var}_{\boldsymbol{y}\mid\theta}(\bar{y}) + \left(\textsf{E}_{\boldsymbol{y}\mid\theta}(\bar{y}) - \theta\right)^2\\
+&= \frac{n\theta}{n^2}+ \left(\frac{n\theta}{n} - \theta\right)^2\\
+&= \frac{\theta}{n}
+\end{align*}
+$$
+
+c. Calcule el riesgo Bayesiano de $\hat\theta$.
+
+El riesgo Bayesiano de $\hat\theta$ es
+$$
+\begin{align*}
+    R_{\textsf{B}}(\theta,\hat\theta) &= \textsf{E}_{\theta}(R_{\textsf{F}}(\theta,\hat\theta))\\
+    &= \int_{\Theta} R_{\textsf{F}}(\theta,\hat\theta)\, p(\theta)\,\textsf{d}\theta\,,\\
+    &= \int_{\Theta} (c_1\theta^2 + c_2\theta + c_3)\,p(\theta) \, \textsf{d}\theta\\
+    &= c_1 \int_{\Theta} \theta^2\, p(\theta) \, \textsf{d}\theta
+    +  c_2 \int_{\Theta} \theta \, p(\theta) \, \textsf{d}\theta
+    +  c_3 \int_{\Theta} p(\theta) \, \textsf{d}\theta\\
+    &=c_1\textsf{E}_\theta(\theta^2) + c_2\textsf{E}_\theta(\theta)+c_3\\
+    &=c_1\left(\textsf{Var}_\theta(\theta)+(\textsf{E}_\theta(\theta))^2\right) + c_2\textsf{E}_\theta(\theta)+c_3\\
+    &=c_1\left(\frac{\alpha}{\beta^2}+\frac{\alpha^2}{\beta^2}\right) + c_2\frac{\alpha}{\beta}+c_3\\
+    &=c_1\frac{\alpha(1-\alpha)}{\beta^2}+c_2\frac{\alpha}{\beta}+c_3
+\end{align*}
+$$
+donde
+$$
+\begin{align*}
+      c_1=\frac{\beta^2}{(\beta+n)^2},\quad
+      c_2=\frac{n-2\alpha\beta}{(\beta+n)^2},\quad\text{y}\quad
+      c_3=\frac{\alpha^2}{(\beta+n)^2}\,.
+\end{align*}
+$$
+
+d. Suponga que un investigador quiere recolectar una muestra lo suficientemente grande para que el riesgo Bayesiano después del experimento sea la mitad del riesgo Bayesiano antes del experimento. Encuentre ese tamaño de muestra.
+
+Se necesita un tamaño de muestra tal que
+$$
+\textsf{E}_{\theta\mid\boldsymbol{y}}(R_{\textsf{F}}(\theta,\hat\theta))=\frac12\,\textsf{E}_{\theta}(R_{\textsf{F}}(\theta,\hat\theta)).
+$$
+Ya se sabe que el riesgo Bayesiano antes del experimento es de la forma $\textsf{E}_{\theta}(R_{\textsf{F}}(\theta,\hat\theta))=c_1\frac{\alpha(1-\alpha)}{\beta^2}+c_2\frac{\alpha}{\beta}+c_3$. 
+
+Siguiendo la misma idea, se tiene que el riesgo Bayesiano de $\hat\theta$ después del experimento es
+$$
+\begin{align*}
+   \textsf{E}_{\theta\mid\boldsymbol{y}}(R_{\textsf{F}}(\theta,\hat\theta))= &=\int_\Theta R_{\textsf{F}}(\theta,\hat\theta)\,p(\theta\mid\boldsymbol{y})\, \textsf{d}\theta\\
+   &= \int_\Theta (c_1\theta^2 + c_2\theta + c_3) p(\theta\mid\boldsymbol{y}) \, \textsf{d}\theta\\
+   &= c_1 \int_\Theta \theta^2\, p(\theta\mid\boldsymbol{y}) \, \textsf{d}\theta
+    +  c_2 \int_\Theta \theta \, p(\theta\mid\boldsymbol{y}) \, \textsf{d}\theta
+    +  c_3 \int_\Theta \pi(\theta\mid\boldsymbol{y}) \, d\theta\\
+    &=c_1\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta^2) + c_2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)+c_3\\
+    &=c_1\left(\textsf{Var}_{\theta\mid\boldsymbol{y}}(\theta) + (\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta))^2\right) + c_2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)+c_3\\
+    &=c_1\left(\frac{\alpha+s }{(\beta + n)^2}+\frac{\left(\alpha+s\right)^2}{(\beta+n)^2}\right) + c_2\frac{\alpha+s}{\beta+n}+c_3\\
+    &=c_1\frac{\left(\alpha+s\right)\left(1-\left(\alpha+s\right)\right)}{(\beta + n)^2}+c_2\frac{\alpha}{\beta + n}+c_3
+\end{align*}
+$$
+
+donde
+$$
+\begin{align*}
+      c_1=\frac{\beta^2}{(\beta+n)^2},\quad
+      c_2=\frac{n-2\alpha\beta}{(\beta+n)^2},\quad\text{y}\quad
+      c_3=\frac{\alpha^2}{(\beta+n)^2}\,.
+\end{align*}
+$$
+
+Entonces, se requiere el tamaño de la muestra $n$ que satisfaga la ecuación
+$$
+  2c_1\frac{\left(\alpha+s\right)\left(1-\left(\alpha+s\right)\right)}{(\beta + n)^2}+2c_2\frac{\alpha}{\beta + n}+2c_3
+  =
+  c^*_1\frac{\alpha(1-\alpha)}{\beta^2}+c^*_2\frac{\alpha}{\beta}+c^*_3
+$$
+
+donde
+$$
+\begin{align*}
+      c^*_1=\frac{\beta^2}{(\beta+0)^2}=1,\quad
+      c^*_2=\frac{0-2\alpha\beta}{(\beta+0)^2}=-2\frac{\alpha}{\beta},\quad\text{y}\quad
+      c^*_3=\frac{\alpha^2}{(\beta+0)^2}=\frac{\alpha^2}{\beta^2}\,.
+\end{align*}
+$$
+
+Se observa que los hiperparámetros $\alpha$ y $\beta$ son cantidades conocidas, y por lo tanto, las constantes $c_k$ y $c_k^*$, para $k=1,2,3$, también lo son. Así mismo, el estadístico suficiente $s=\sum_{i=1}^n y_i$ también es una cantidad conocida después de que el experimento tenga lugar. En consecuencia, en la ecuación anterior la única cantidad desconocida es el tamaño de muestra $n$.
+
+5. Considere el modelo Beta-Binomial $x\mid\theta\sim \textsf{Bin}(n,\theta)$ con $n$ conocido, y $\theta\sim \textsf{Beta}(\sqrt{n}/2,\sqrt{n}/2)$.
+
+a. ¿Cuál es la distribución posterior?
+
+La distribución posterior es:
+$$
+\begin{align*}
+    p(\theta\mid x) &= \frac{p(x\mid\theta)\,p(\theta)}{\int_\Theta p(x\mid\theta)\,p(\theta)\, \textsf{d}\theta}\\
+    &= \frac{\binom{n}{x} \theta^x (1-\theta)^{n-x}\frac{1}{B(\sqrt{n}/2,\sqrt{n}/2)} \theta^{\sqrt{n}/2-1} (1-\theta)^{\sqrt{n}/2-1}}{\int_\Theta \binom{n}{x} \theta^x (1-\theta)^{n-x}\frac{1}{B(\sqrt{n}/2,\sqrt{n}/2)} \theta^{\sqrt{n}/2-1} (1-\theta)^{\sqrt{n}/2-1} \, \textsf{d}\theta}\\
+    &= \frac{\theta^{\sqrt{n}/2 + x-1} (1-\theta)^{\sqrt{n}/2 + n-x-1}}{\int_\Theta \theta^{\sqrt{n}/2 + x-1} (1-\theta)^{\sqrt{n}/2 + n-x-1} \, \textsf{d}\theta}\\
+    &= \frac{\theta^{\sqrt{n}/2 + x-1} (1-\theta)^{n-x+\sqrt{n}/2-1}}{\textsf{B}(\sqrt{n}/2 + x,\sqrt{n}/2 + n-x)}\\
+\end{align*}
+$$
+y por lo tanto, $\theta\mid x \sim \textsf{Beta}(\sqrt{n}/2 + x,\sqrt{n}/2 + n-x)$.
+
+b. ¿Cuál es el estimador que minimiza la perdida esperada posterior si la función de perdida es $L(\theta,\hat\theta)=(\theta-\hat\theta)^2$? Llame tal estimador $\hat{\theta}$ y muestre que el riesgo frecuentista correspondiente es constante.
+
+Si la función de perdida es $L(\theta,\hat\theta)=(\theta-\hat\theta)^2$, i.e., la función de perdida cuadrática, entonces el estimador que minimiza la función de perdida esperada a posteriori es la media posterior. Así, se tiene que
+$$
+\hat{\theta}=\textsf{E}(\theta\mid x)=\frac{x+\sqrt{n}/2}{(x+\sqrt{n}/2)+(n-x+\sqrt{n}/2)} =
+\frac{x+\sqrt{n}/2}{\sqrt{n}+ n} = \frac{\frac{x}{\sqrt{n}}+\frac12}{1 + \sqrt{n}}\,.
+$$
+Ahora, si la función de perdida es la función de perdida cuadrática, entonces el riesgo frecuentista $R_{\textsf{F}}(\theta,\hat\theta)$ es
+$$
+R_{\textsf{F}}(\theta,\hat\theta) = \textsf{E}_{\boldsymbol{y}\mid\theta}(L(\theta,\hat\theta)) = \textsf{E}_{\boldsymbol{y}\mid\theta}((\theta-\hat\theta)^2)
+$$
+el cual corresponde al error cuadrático medio (MSE, por sus siglas en inglés) evaluado en $\hat\theta$, i.e,
+$$
+\begin{align*}
+R_{\textsf{F}}(\theta,\hat\theta) &= \textsf{MSE}(\hat\theta)\\
+&= \textsf{Var}_{x\mid\theta}(\hat\theta) + \left(\textsf{E}_{x\mid\theta}(\hat\theta) - \theta\right)^2\\
+&= \textsf{Var}_{x\mid\theta}\left(\frac{\frac{x}{\sqrt{n}}+\frac12}{1 + \sqrt{n}}\right) + \left(\textsf{E}_{x\mid\theta}\left(\frac{\frac{x}{\sqrt{n}}+\frac12}{1 + \sqrt{n}}\right) - \theta\right)^2\\
+&= \left(\frac{\frac{1}{\sqrt{n}}}{1 + \sqrt{n}}\right)^2\textsf{Var}_{x\mid\theta}(x)+ \left(\frac{\frac{\textsf{E}_{x\mid\theta}(x)}{\sqrt{n}}+\frac12}{1 + \sqrt{n}} - \theta\right)^2\\
+&= \frac{1}{n(1 + \sqrt{n})^2}\,n\theta(1-\theta) + \left(\frac{\frac{n\theta}{\sqrt{n}}+\frac12}{1 + \sqrt{n}}-\theta\right)^2\\ 
+&=\frac{\theta(1-\theta)}{(1 + \sqrt{n})^2} + \left(\frac{\sqrt{n}\theta+\frac12 -\theta - \sqrt{n}\theta}{1 + \sqrt{n}}\right)^2\\
+&=\frac{\theta(1-\theta)}{(1 + \sqrt{n})^2} + \frac{(\frac12 -\theta)^2}{(1 + \sqrt{n})^2}\\
+&=\frac{\theta -\theta^2+\frac14 -\theta + \theta^2}{(1 + \sqrt{n})^2}\\
+&=\frac{1}{4(1 + \sqrt{n})^2}\\
+\end{align*}
+$$
+lo cual resulta ser constante.
+
+c. Sea $\theta_0=x/n$. Encuentre el riesgo frecuentista de este estimador. Compare los riesgos de $\hat{\theta}$ y $\theta_0$, para $n=10,50,100$. ¿Qué se puede concluir?
+
+El riesgo de $\theta_0=x/n$ es
+$$
+\begin{align*}
+        R_{\textsf{F}}(\theta,\theta_0)&= \textsf{MSE}(\theta_0)\\
+        &= \textsf{Var}_{x\mid\theta}(\theta_0) + \left(\textsf{E}_{x\mid\theta}(\theta_0) - \theta\right)^2\\
+        &= \textsf{Var}_{x\mid\theta}(x/n) + \left(\textsf{E}_{x\mid\theta}(x/n) - \theta\right)^2\\
+        &= \frac{1}{n^2}\textsf{Var}_{x\mid\theta}(x)+ \left(\frac{\textsf{E}_{x\mid\theta}(x)}{n}-\theta\right)^2\\
+        &= \frac{n\theta(1-\theta)}{n^2}+ \left[\frac{n\theta}{n}-\theta\right]^2\\
+        &= \frac{\theta(1-\theta)}{n}\\
+\end{align*}
+$$
+
+Los gráficos de los riesgos de $\hat\theta$ y $\theta_0$ para $n=10,50,100$ muestran que ninguno de los estimadores domina al otro para todos los valores de $\theta\in\Theta$.  
+
+Se observa que $\hat\theta$ domina $\theta_0$ cuando:
+
+- $0.174<\theta<0.825$ para $n=10$.
+- $0.258<\theta<0.741$ para $n=50$.
+- $0.291<\theta<0.708$ para $n=100$.
+
+Un patrón claro consiste en que a medida que le tamaño de muestra se incrementa:
+
+- El riesgo de ambos estimadores decrece.
+- El intervalo donde $\hat\theta$ domina a $\theta_0$ se reduce.
+- El riesgo de $\theta_0$ donde $\theta_0$ es dominado por $\hat\theta$ se aproxima al riesgo de $\hat\theta$.
+
+```{r}
+# r.1 = riesgo de theta^
+# r.12= riesgo de theta0
+r.1  <- function(theta, n) theta^0/(4*(1+sqrt(n))^2)
+r.2  <- function(theta, n) theta*(1-theta)/n
+grid <- seq(from = 0.0, to = 1.0, length = 1000)
+# n = 10
+fun <- function(x) r.1(x, n=10) - r.2(x, n=10)
+uni1 <- uniroot(fun, c(0.0, 0.5))$root
+uni2 <- uniroot(fun, c(0.5, 1.0))$root
+plot(grid, r.2(theta=grid, n=10), type = 'l', cex.axis=0.7, xlab = expression(theta), ylab = 'Riesgo', lwd = 1, las=1, col="red", main="n=10", ylim=c(0,0.025))
+lines(grid, r.1(theta=grid, n=10), lwd = 1, col="blue")
+legend("bottom", c(expression(hat(theta)),expression(theta[0])), col = c("blue", "red"), lty=1, lwd=2, bty="n")	
+abline(v = uni1, lty = 3)
+abline(v = uni2, lty = 3)
+points(uni1, r.1(uni1, n=10), pch = 16, cex = 0.8)
+points(uni2, r.1(uni2, n=10), pch = 16, cex = 0.8)
+text( 0.3, 0.013, '(0.174;0.014)', cex = 1.0 )
+text( 0.7, 0.013, '(0.825;0.014)', cex = 1.0 )
+segments(uni1, y0=0.01, x1 = uni2, lwd=3)
+text( 0.5, 0.008, '0.650', cex = 1.0)
+```
+```{r}
+# n = 50
+fun <- function(x) r.1(x, n=50) - r.2(x, n=50)
+uni1 <- uniroot(fun, c(0.0, 0.5))$root
+uni2 <- uniroot(fun, c(0.5, 1.0))$root
+plot(grid, r.2(theta=grid, n=50), type = 'l', cex.axis=0.7, xlab = expression(theta), ylab = 'Riesgo', lwd = 1, las=1, col="red", main="n=50", ylim=c(0,0.025))
+lines(grid, r.1(theta=grid, n=50), lwd = 1, col="blue")
+legend("top", c(expression(hat(theta)),expression(theta[0])), col = c("blue", "red"), lty=1, lwd=2, bty="n")	
+abline(v = uni1, lty = 3)
+abline(v = uni2, lty = 3)
+points(uni1, r.1(uni1, n=50), pch = 16, cex = 0.8)
+points(uni2, r.1(uni2, n=50), pch = 16, cex = 0.8)
+text( 0.1, 0.006, '(0.258;0.003)', cex = 1.0 )
+text( 0.9, 0.006, '(0.741;0.003)', cex = 1.0 )
+segments(uni1, y0=0.01, x1 = uni2, lwd=3)
+text( 0.5, 0.008, '0.482', cex = 1.0)
+```
+```{r}
+# n = 100
+fun <- function(x) r.1(x, n=100) - r.2(x, n=100)
+uni1 <- uniroot(fun, c(0.0, 0.5))$root
+uni2 <- uniroot(fun, c(0.5, 1.0))$root
+plot(grid, r.2(theta=grid, n=100), type = 'l', cex.axis=0.7, xlab = expression(theta), ylab = 'Riesgo', lwd = 1, las=1, col="red", main="n=100", ylim=c(0,0.025))
+lines(grid, r.1(theta=grid, n=100), lwd = 1, col="blue")
+legend("top",  c(expression(hat(theta)),expression(theta[0])), col = c("blue", "red"), lty=1, lwd=2, bty="n")	
+abline(v = uni1, lty = 3)
+abline(v = uni2, lty = 3)
+points(uni1, r.1(uni1, n=100), pch = 16, cex = 0.8)
+points(uni2, r.1(uni2, n=100), pch = 16, cex = 0.8)
+text( 0.1, 0.004, '(0.291;0.002)', cex = 1.0 )
+text( 0.9, 0.004, '(0.708;0.002)', cex = 1.0 )
+segments(uni1, y0=0.01, x1 = uni2, lwd=3)
+text( 0.5, 0.008, '0.416', cex = 1.0)
+```
+
+
+6. Sea $x\sim \textsf{Bin}(n,\theta)$ con $n$ conocido, y $\theta \sim \textsf{Beta}(\alpha,\beta)$. Considere la función de perdida $L(\theta,\hat\theta)=(\theta-\hat\theta)/(\theta(1-\theta))$. Encuentre el estimador que minimiza la perdida esperada posterior para esta función de perdida.
+
+En este caso la distribución posterior es $\theta\mid x\sim \textsf{Beta}(\alpha+x,\beta+n-x)$. Entonces, se tiene que la perdida esperada posterior es 
+$$
+\begin{align*}
+    \textsf{E}_{\theta\mid x}(L(\theta,\hat\theta)) 
+    &= \int_{\Theta} L(\theta,\hat\theta)\, p(\theta\mid x)\, \textsf{d}\theta\\\
+    &= \int_\Theta \frac{(\theta-\hat\theta)^2}{\theta(1-\theta)} \frac{\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1}}{B(\alpha+x,\beta+n-x)} \,\textsf{d}\theta\\
+    &= \frac{1}{\textsf{B}(\alpha+x,\beta+n-x)}\int_\Theta (\theta-\hat\theta)^2 \theta^{\alpha+x-2}(1-\theta)^{\beta+n-x-2} \,\textsf{d}\theta\\
+    &= \frac{\textsf{B}(\alpha+x-1,\beta+n-x-1)}{\textsf{B}(\alpha+x,\beta+n-x)}\int_\Theta (\theta-\hat\theta)^2 \frac{\theta^{(\alpha+x-1)-1}(1-\theta)^{(\beta+n-x-1)-1}}{B(\alpha+x-1,\beta+n-x-1)} \,\textsf{d}\theta\\
+    &= \frac{\textsf{B}(\alpha+x-1,\beta+n-x-1)}{\textsf{B}(\alpha+x,\beta+n-x)}\int_\Theta L^*(\theta,\hat\theta)\, p^*(\theta\mid x) \,\textsf{d}\theta
+\end{align*}
+$$
+donde
+$$
+p^*(\theta\mid x)=\frac{\theta^{(\alpha+x-1)-1}(1-\theta)^{(\beta+n-x-1)-1}}{\textsf{B}(\alpha+x-1,\beta+n-x-1)}\qquad\text{y}\qquad
+L^*(\theta,\hat\theta)=(\theta-\hat\theta)^2.
+$$
+Dado que
+$$
+\int_\Theta L(\theta,\hat\theta)\, p(\theta\mid x)\, \textsf{d}\theta = c\,\int_\Theta L^*(\theta,\hat\theta)\, p^*(\theta\mid x) \,\textsf{d}\theta
+$$
+donde $c$ es una constante que no depende de $\theta$ dada por
+$$
+c=\frac{\textsf{B}(\alpha+x-1,\beta+n-x-1)}{\textsf{B}(\alpha+x,\beta+n-x)}\,,
+$$
+$L^*(\theta,\hat\theta)$ es la función de perdida cuadrática, entonces el estimador que minimiza la perdida esperada posterior de acuerdo con $p^*(\theta\mid x)$, y en consecuencia con $p(\theta\mid x)$, es la media posterior de $p^*(\theta\mid x)$. Así se tiene que
+$$
+\hat\theta=\textsf{E}(\theta\mid x)=\frac{\alpha+x-1}{(\alpha+x-1)+(\beta+n-x-1)}=\frac{\alpha+x-1}{\alpha+\beta+n-2}\,.
+$$
+
+7. Sea $L(\theta,\hat\theta) = \omega(\theta)(\theta - \hat\theta)^2$ la función de perdida cuadrática ponderada, donde $\omega(\theta)$ es una función no negativa. Muestre que el estimador que minimiza la perdida esperada posterior tiene la forma
+$$
+\hat\theta=\frac{\textsf{E}(\omega(\theta)\,\theta\mid \boldsymbol{y})}{\textsf{E}(\omega(\theta)\mid \boldsymbol{y})}\,.
+$$
+
+Se tiene que
+$$
+\begin{align*}
+    \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)(\theta - \hat\theta)^2) &= \int_\Theta \omega(\theta)(\theta-\hat\theta)^2\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta\\
+    &=\int_\Theta\omega(\theta)(\theta-\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)+\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)^2\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta\\
+    &=\int_\Theta\omega(\theta)(\theta-\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta))^2\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta
+    +2\int_\Theta\omega(\theta)(\theta-\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta))(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta
+    +\int_\Theta\omega(\theta)(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)^2\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta
+\end{align*}
+$$
+
+La primera integral es constante respecto a $\hat\theta$ y no afecta el proceso de minimización de respecto a $\hat\theta$. De otra parte, la segunda integral es
+$$
+\begin{align*}
+    2(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)\int_\Theta\omega(\theta)(\theta-\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta))\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta
+    &=2(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)\left(
+    \int_\Theta\omega(\theta)\,\theta\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta
+    -\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\int_\Theta\omega(\theta)\,p(\theta\mid\boldsymbol{y})\,\textsf{d}\theta
+    \right)\\
+    &=2(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)\left(
+    \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta)
+    -\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\,\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+    \right)
+\end{align*}
+$$
+De esta forma, tomando la primera derivada de $\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)(\theta - \hat\theta)^2)$ respecto a $\hat\theta$, se tiene que
+$$
+\begin{align*}
+    \frac{\textsf{d}}{\textsf{d}\hat\theta}\,\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)(\theta - \hat\theta)^2)
+    &=-2\left( \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) - \textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)) \right)
+    +\frac{\textsf{d}}{\textsf{d}\hat\theta}\int_\Theta\omega(\theta)(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)^2\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta\\
+    &=-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+    +\frac{\textsf{d}}{\textsf{d}\hat\theta}(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)^2\int_\Theta\omega(\theta)\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta\\
+    &=-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+    -2(\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)-\hat\theta)\int_\Theta\omega(\theta)\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta\\
+    &=-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+    -2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\int_\Theta\omega(\theta)\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta+2\hat\theta\int_\Theta\omega(\theta)\,p(\theta\mid \boldsymbol{y})\,\textsf{d}\theta\\
+    &=-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+    -2\textsf{E}_{\theta\mid\boldsymbol{y}}(\theta)\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))+2\hat\theta\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))\\
+    &=-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\hat\theta\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))
+  \end{align*}
+$$
+
+Igualando esta derivada a cero y despejando para $\hat\theta$ con el fin de hallar el punto crítico correspondiente, se tiene que
+$$
+-2 \textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta) +2\hat\theta\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)) = 0
+$$
+y en consecuencia, de $\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)(\theta - \hat\theta)^2)$ respecto a $\hat\theta$ es
+$$
+\hat\theta = \frac{\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)\,\theta)}{\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta))}
+$$
+
+Además, la segunda derivada 
+$$
+ \frac{\textsf{d}^2}{\textsf{d}\hat\theta^2}\,\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)(\theta - \hat\theta)^2)=2\textsf{E}_{\theta\mid\boldsymbol{y}}(\omega(\theta)) >0
+$$
+para todo $\hat\theta$ (pues $\omega(\theta)$ es una función no negativa), lo que significa que el punto crítico correspondiente en efecto minimiza la función objetivo.
