@@ -223,7 +223,7 @@ dinvgamma <- function(x, a, b, log = FALSE) {
   if (log == FALSE) out <- exp(out)
   return(out)
 }
-gs <- 250  # n. de puntos a evaluar en un rango de valores
+gs    <- 250  # n. de puntos a evaluar en un rango de valores
 theta <- seq(from = 1.6,  to = 2.0,  length = gs)  # theta     : media
 is2   <- seq(from = 15,   to = 160,  length = gs)  # 1/sigma^2 : presición
 s2g   <- seq(from = .001, to = .045, length = gs)  # sigma^2   : varianza  
@@ -241,7 +241,7 @@ for(i in 1:gs) {
 
 ```{r, fig.width=12, fig.height=6, fig.align='center'}
 grays <- gray((10:0)/10)  # paleta de colores (escala de grises)
-par(mfrow=c(1,2), mar=c(3,3,1,1), mgp=c(1.75,0.75,0))
+par(mfrow = c(1,2), mar = c(3,3,1,1), mgp = c(1.75,0.75,0))
 # posterior (theta, 1/sigma^2)
 image(x = theta, y = is2, z = exp(ld.th.is2), col = grays, xlab = expression(theta), ylab = expression(tilde(sigma)^2)) 
 # posterior (theta, sigma^2)
@@ -260,16 +260,16 @@ image(x = theta, y = s2g, z = exp(ld.th.s2), col = heat.colors(100), xlab = expr
 
 ```{r, r, fig.width=6, fig.height=6, fig.align='center'}
 # GRAFICO 3-D
-gs <- 30  # n. de puntos a evaluar en un rango de valores
-theta <- seq(from = 1.72, to = 1.9,  length = gs)  # theta     : media
-s2g   <- seq(from = .005, to = .030, length = gs)  # sigma^2   : varianza  
+gs    <- 30  # n. de puntos a evaluar en un rango de valores
+theta <- seq(from = 1.72, to = 1.9,  length = gs)  # theta   : media
+s2g   <- seq(from = .005, to = .030, length = gs)  # sigma^2 : varianza  
 ld.th.s2 <- matrix(data = NA, nrow = gs, ncol = gs)  # para ( theta, sigma^2 )
 for(i in 1:gs) { 
   for(j in 1:gs) {
     ld.th.s2[i,j] <- dnorm(x = theta[i], mean = mun, sd = sqrt(s2g[j]/kn), log = T) + dinvgamma(x = s2g[j], a = nun/2, nun*s2n/2, log = T)
   }
 }
-par(mfrow=c(1,1), mar=c(3,3,1,1), mgp=c(1.75,0.75,0))
+par(mfrow = c(1,1), mar = c(3,3,1,1), mgp = c(1.75,0.75,0))
 persp(x = theta, y = s2g, z = exp(ld.th.s2), theta = 30, phi = 30, expand = 1, xlab = "Media", ylab = "Varianza", zlab = "Densidad", col = "gray95")
 ```
 
@@ -281,28 +281,16 @@ persp(x = theta, y = s2g, z = exp(ld.th.s2), theta = 30, phi = 30, expand = 1, x
 ```{r}
 S <- 50000  # n. de simulaciones
 set.seed(1)
-s2.postsample    <- 1/rgamma(n = S, shape = nun/2, rate = nun*s2n/2)
+s2.postsample <- 1/rgamma(n = S, shape = nun/2, rate = nun*s2n/2)
 theta.postsample <- rnorm(n = S, mean = mun, sd = sqrt(s2.postsample/kn))
 ```
 
 ```{r, fig.width=6, fig.height=6, fig.align='center'}
-# evaluacion
-gs <- 250
-theta <- seq(from = 1.6,  to = 2.0,  length = gs)   # theta   : media
-s2g   <- seq(from = .001, to = .045, length = gs)   # sigma^2 : varianza  
-ld.th.s2 <- matrix(data = NA, nrow = gs, ncol = gs) # para ( theta, sigma^2 )
-for(i in 1:gs) { 
-  for(j in 1:gs) {
-    ld.th.s2[i,j] <- dnorm(x = theta[i], mean = mun, sd = sqrt(s2g[j]/kn), log = T) + dinvgamma(x = s2g[j], a = nun/2, nun*s2n/2, log = T)
-  }
-}
 # grafico
 layout(matrix(c(1,1,2,3), 2, 2, byrow = T))
 par(mar = c(3,3,1,1), mgp = c(1.75,0.75,0))
-# distribucion posterior conjunta
-image(x = theta, y = s2g, z = exp(ld.th.s2), col = grays, xlab = expression(theta), ylab = expression(sigma^2), xlim = c(1.60,2.0), ylim=c(.001,.07))
-# muestras
-points(theta.postsample[1:5000], s2.postsample[1:5000], pch = ".", col = "blue")
+# distribucion conjunta
+plot(theta.postsample, s2.postsample, pch = 16, cex = 0.5, col = adjustcolor("black", 0.3), xlab = expression(theta), ylab = expression(sigma^2))
 # distribucion posterior marginal theta
 plot(density(theta.postsample,adjust=3), main="", xlab=expression(theta), xlim=c(1.60,2.0), ylab=expression(paste(italic("p("), theta,"| y)",sep=""))) 
 abline(v=quantile(x = theta.postsample, c(.025,.975)), col="gray", lwd=2)
