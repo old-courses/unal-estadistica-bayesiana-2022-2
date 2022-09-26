@@ -68,8 +68,8 @@ con $s^2(\theta) = \tfrac{1}{n}\sum_{i=1}^n (y_i-\theta)^2 = (n-1)s^2 + n(\bar{y
 
 Dado un **estado actual** de los parámetros del modelo $\boldsymbol{\theta}^{(b)} = \left(\theta^{(b)}, (\sigma^2)^{(b)}\right)$, se genera un nuevo estado $\boldsymbol{\theta}^{(b+1)}$ como sigue:
 
-1. Muestrar $\theta^{(b+1)}\sim p(\theta\mid(\sigma^2)^{(b)}, \boldsymbol{y})$.
-2. Muestrar $(\sigma^2)^{(b+1)}\sim p(\sigma^2\mid\theta^{(b+1)}, \boldsymbol{y})$.
+1. Muestrear $\theta^{(b+1)}\sim p(\theta\mid(\sigma^2)^{(b)}, \boldsymbol{y})$.
+2. Muestrear $(\sigma^2)^{(b+1)}\sim p(\sigma^2\mid\theta^{(b+1)}, \boldsymbol{y})$.
 3. Establecer $\boldsymbol{\theta}^{(b+1)} = \left(\theta^{(b+1)}, (\sigma^2)^{(b+1)}\right)$. 
 4. Repetir los pasos 1. a 3. hasta convergencia.
 
@@ -239,13 +239,13 @@ Una **cadena de Markov** es una clase particular de proceso estocástico cuyos *
 
 ### Cadenas de Markov bien comportadas {-}
 
-- Un estado $i$ se denomina **periódico** (*periodic*) con periodo $d$ si es visitado después de un número de pasos múltiplo de un entero $d > 1$.
-- Una cadena se denomina **aperiódica** (*aperiodic*) si para todos los estados se tiene que tal múltiplo no existe (i.e., $d=1$).
+- Una cadena se denomina **irreducible** si es posible llegar a cualquier estado desde cualquier otro.      
+- Un estado $i$ se denomina **periódico** (*periodic*) con periodo $d$ si $i$ es visitado después de un número de pasos múltiplo de un entero $d > 1$.
+- Una cadena se denomina **aperiódica** (*aperiodic*) si para todos los estados se tiene que $d=1$.
 - Una cadena se denomina **positiva recurrente** (*positive recurrent*) si para todos los estados $i$:
     a. Si el proceso comienza en un estado $i$ regresará a $i$ con probabilidad 1. 
     b. El tiempo de espera medio para el regreso al estado $i$ es finito.
-      
-- Una cadena se denomina **ergódica** (*ergodic*)  **aperiódica** y **positiva recurrente**. 
+- Una cadena se denomina **ergódica** (*ergodic*) si es **irreducible**, **aperiódica** y **positiva recurrente**. 
 
 ### Teorema Ergódico {-}
 
@@ -286,7 +286,7 @@ El **muestreador de Gibbs** hace parte de un conjunto de técnicas de aproximaci
 
 Los métodos de MCMC constituyen **técnicas de aproximación numérica**, **no son modelos**, **no generan más información** además de la contenida en $\boldsymbol{y}$.
 
-## Diagnosticos de convergencia (estacionaridad)
+## Diagnósticos de convergencia (estacionariedad)
 
 **Preguntas:**
 
@@ -304,11 +304,11 @@ No es posible estar absolutamente seguro que la cadena ha convergido. **Solo se 
 
 ### Serie {-}
 
-Permiten chequear **estacionaridad** (muestras de una parte de la cadena tienen una distribución similar a muestras de otra parte de la cadena). 
+Permiten chequear **estacionariedad** (muestras de una parte de la cadena tienen una distribución similar a muestras de otra parte de la cadena). 
 
 También permiten ver si la cadena está **mezclando** bien o no (en simulación de Monte Carlo la partícula se mueve libremente a cualquier región del espacio de parámetros, lo cual significa cero autocorrelación).
 
-Para resolver problemas de estacionaridad se recomienda **correr la cadena con más iteraciones**.
+Para resolver problemas de estacionariedad se recomienda **correr la cadena con más iteraciones**.
 
 ### Autocorrelación {-}
 
@@ -320,9 +320,26 @@ Entre **mayor sea la autocorrelación**, se necesitan **más muestras** para obt
 
 Para resolver problemas de correlación se recomienda **adelgazar la cadena sistemáticamente** (muestreo sistemático de la cadena).
 
+### Tamaño efectivo de muestra {-}
+
+Las cadenas suelen estar autocorrelacionadas positivamente, por lo tanto contienen menos información que una secuencia de muestras iid de la distribución objetivo.
+
+Se quiere establecer la cantidad de muestras iid que contendrían la misma información de la cadena:
+$$
+n_{\text{eff}}(\theta) = \frac{B}{1+2\sum_{t=1}^\infty \text{acf}_t(\theta)}
+$$
+donde $\rho_t$ es la autocorrelación en el lag $t$. Comúnmente, la suma se hace hasta que $\text{acf}_{t-1}+\text{acf}_t < 0$.
+
+### Error estándar de Monte Carlo {-}
+
+El error estándar de Monte Carlo hace referencia a la variabilidad (desviación estándar) del promedio muestral respecto al tamaño efectivo de muestra:
+$$
+\textsf{EMC}(\hat\theta) = \frac{\textsf{DE}(\hat\theta)}{\sqrt{n_{\text{eff}}(\theta)}}
+$$
+donde $\textsf{DE}(\hat\theta) = \sqrt{\frac{1}{B-1}\sum_{b=1}^B (\theta^{(b)}-\bar\theta)^2}$ es la desviación estándar muestral de $\hat\theta$ y $n_{\text{eff}}$ es el tamaño efectivo de la muestra asociada con la cadena de $\theta$.
 
 
-## Ejemplo: Diagnosticos de convergencia
+## Ejemplo: Diagnósticos de convergencia
 
 
 ### Series {-}
@@ -351,7 +368,7 @@ plot(LL[-c(1:10)], type = "p", pch = ".", xlab = "Iteración", ylab = "Log-veros
 ### Autocorrelación {-}
 
 
-```{r, fig.width=8, fig.height=4, fig.height=5}
+```{r, fig.width=8, fig.height=4, fig.align='center'}
 # autocorrelacion
 par(mfrow = c(1,2), mar = c(3,3,3,1), mgp = c(1.75,0.75,0))
 acf(PHI[,1], main = expression(theta))
@@ -374,11 +391,11 @@ coda::effectiveSize(PHI)
 
 
 ```{r}
-# tamaño efectivo de la muestra
-apply(X = PHI, MARGIN = 2, FUN = sd)/coda::effectiveSize(PHI)
+# error estandar de monte carlo
+apply(X = PHI, MARGIN = 2, FUN = sd)/sqrt(coda::effectiveSize(PHI))
 ```
 
-Ver https://cran.r-project.org/web/packages/bayesplot/vignettes/visual-mcmc-diagnostics.html para más diagnosticos.
+Ver https://cran.r-project.org/web/packages/bayesplot/vignettes/visual-mcmc-diagnostics.html y https://arviz-devs.github.io/arviz/api/diagnostics.html para más diagnósticos.
 
 # Referencias {-}
 
