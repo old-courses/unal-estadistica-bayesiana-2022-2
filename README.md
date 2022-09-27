@@ -18,8 +18,12 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 - Taller 2.
 - Taller 3.
 - Taller 4.
+- Taller 5.
 
 ## Data
 
 - VictimasVS-1231221.txt
 - CNPV2018_5PER_A2_11_muestra.txt
+- school1.dat
+- school2.dat
+- school3.dat
