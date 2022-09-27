@@ -1,0 +1,818 @@
+---
+title: "Taller 5"
+author: 
+- Webpage https://sites.google.com/view/juansosa/ 
+- YouTube https://www.youtube.com/c/JuanSosa1702 
+- GitHub  https://github.com/jstats1702 
+- Rpubs   https://rpubs.com/jstats1702
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newcommand{\lf}{\left}
+\newcommand{\rg}{\right}
+\newcommand{\ra}{\sqrt}
+\newcommand{\xv}{\boldsymbol{x}}
+\newcommand{\tev}{\boldsymbol{\theta}}
+\newcommand{\ga}{\gamma}
+\newcommand{\lam}{\lambda}
+\newcommand{\ups}{\upsilon}
+\newcommand{\te}{\theta}
+\newcommand{\si}{\sigma}
+\newcommand{\ka}{\kappa}
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\xb}{\bar{x}}
+\newcommand{\G}{\Gamma}
+\newcommand{\pro}{\propto}
+\newcommand{\ent}{\Rightarrow}
+\newcommand{\caja}{\boxed}
+\newcommand{\esp}[1]{\mathbb{E}\left(#1\right)}
+\newcommand{\ex}[1]{ \exp{ \left\{ #1 \right\} } }
+
+1. Los archivos `school1.dat`, `school2.dat`, y `shool3.dat` contienen datos sobre la cantidad de tiempo que los estudiantes de tres colegios dedicaron a estudiar o hacer tareas durante un período de exámenes.
+
+a. Explore los datos gráfica y numéricamente.
+b. Analice los datos de cada una de los colegios separadamente, utilizando un modelo Normal con una distribución previa conjugada, en la que $\mu_0 = 5$, $\sigma_0^2 = 4$, $\kappa_0 = 1$, $\nu_0 = 2$, y calcule lo siguiente:
+  
+    - Medias posteriores e intervalos de credibilidad al 95% para la media $\theta$, la desviación estándar $\sigma$, y el coeficiente de variación $\frac{\sigma}{\mu}$ de cada escuela.
+    - La probabilidad posterior de que $\theta_i < \theta_j < \theta_k$ para las seis permutaciones $\{i, j, k \}$ de $\{1, 2, 3 \}$, donde $\theta_i$ es la media del del colegio $i$.
+    - La probabilidad posterior de que $\tilde{y}_i < \tilde{y}_j < \tilde{y}_k$ para las seis permutaciones $\{i, j, k \}$ de $\{1, 2, 3 \}$, donde $\tilde{y}_i$ es una observación de la distribución predictiva posterior de la escuela $i$.
+    - Calcule la probabilidad posterior de que $\theta_1$ sea mayor que $\theta_2$ y $\theta_3$, y la probabilidad posterior de que $\tilde{y}_1$ sea mayor que $\tilde{y}_2$ y $\tilde{y}_3$.
+    
+c. Dibuje la distribución posterior conjunta de $(\theta, \sigma^2)$ para cada escuela.
+d. Compruebe la bondad de ajuste del modelo para cada escuela utilizando como estadísticos de prueba la media y el coeficiente de variación.
+
+2. Considere el modelo Normal dado por $y_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}(\theta,\sigma^2)$, para $i=1,\ldots,n$, con distribución previa
+$$
+\theta \mid \sigma^{2} \sim \textsf{N}\left(\theta_{0}, \kappa_{0}\sigma^{2}\right)
+\qquad\text{y}\qquad
+\sigma^{2} \sim \textsf{GI}\left(a, b\right)\,,
+$$
+donde $\theta_0,\kappa_0,a,b$ son los hiperparámetros del modelo. 
+
+a. Encuentre la distribución posterior de $(\theta,\sigma^2)$.
+b. Encuentre la distribución condicional completa de $\theta$.
+c. Encuentre la distribución marginal de $\theta$.
+d. Encuentre la distribución marginal de $\sigma^2$.
+e. Simule $n=1000$ observaciones i.i.d de $\textsf{N}(5,1)$. Ajuste el modelo suponiendo los siguientes escenarios previos: i. estados de conocimiento previo bastante informativo acerca de los valores reales de los parámetros, ii. estado de conocimiento previo informativo acerca de $\theta$ y difuso acerca de $\sigma^2$, iii. estado de conocimiento previo informativo acerca de $\sigma^2$ y difuso acerca de $\theta$, y iv. estado de conocimiento previo difuso acerca de ambos parámetros. Caracterice la distribución posterior en cada caso.
+f. Suponga que está interesado en hacer inferencia sobre $\eta=\sigma/\theta$. Desarrolle un algoritmo de Monte Carlo para calcular la media posterior y un intervalo de credibilidad al 95\% para $\eta$. Use el algoritmo para calcular estas cantidades en todos los escenarios descritos anteriormente.
+
+3. Considere el modelo Normal $x_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}(\theta,\sigma^2)$, para $i=1,\ldots,n$, donde $\theta$ es desconocido y $\sigma^2$ es conocido. Además, considere una distribución previa para $\theta$ definida por medio de una mezcla finita de previas conjugadas de la forma
+$$
+p(\theta) = \sum_{\ell=1}^K w_\ell\,\phi(\theta\mid\mu_\ell,\tau^2)\,
+$$
+donde $K$ es un entero positivo fijo mayor o igual que 1, $w_1,\ldots,w_K$ es un sistema de pesos tales que y $\sum_{\ell=1}^K w_\ell = 1$ y $0\leq w_\ell\leq 1$ para $\ell=1,\ldots,K$, y $\phi(\theta\mid\mu,\tau^2)$ denota la densidad de la distribución Normal con media $\mu$ y varianza $\tau^2$. Una distribución previa de esta forma permite especificar estados de información previos multimodales acerca de $\theta$.
+
+a. Encuentre la distribución posterior de $\theta$.
+b. Encuentre la media posterior de $\theta$.
+c. Encuentre la distribución predictiva previa.
+d. Encuentre la distribución predictiva posterior.
+
+4. Considere el modelo Normal Trucado $x_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}_{(0,\infty)}(\theta,\sigma^2)$, para $i=1,\ldots,n$, donde $\sigma^2=1$. Además, considere la distribución previa para $\theta$ dada por $\theta\sim\textsf{N}(\mu,\tau^2)$.
+
+a. Encuentre la distribución posterior de $\theta$.
+b. ¿Este modelo se puede catalogar como un modelo conjugado?
+
+# Solución {-}
+
+1. Los archivos `school1.dat`, `school2.dat`, y `shool3.dat` contienen datos sobre la cantidad de tiempo que los estudiantes de tres colegios dedicaron a estudiar o hacer tareas durante un período de exámenes.
+
+a. Explore los datos gráfica y numéricamente.
+
+```{r}
+# datos
+school1 <- read.table("school1.dat", quote="\"", comment.char="")
+school2 <- read.table("school2.dat", quote="\"", comment.char="")
+school3 <- read.table("school3.dat", quote="\"", comment.char="")
+x1 <- school1$V1
+x2 <- school2$V1
+x3 <- school3$V1
+# EDA (Exploratory Data Analysis)
+eda <- function(x) c(length(x), min(x), max(x), mean(x), quantile(x, c(.25,.5,.75)), sd(x), 100*sd(x)/mean(x))
+tab <- round(rbind(eda(x1), eda(x2), eda(x3)), 2)
+colnames(tab) <- c("n","Min","Max","Media","25%","50%","75%","DE","CV(%)")
+rownames(tab) <- paste("School", 1:3, sep = " ")
+knitr::kable(x = tab, digits = 2)
+```
+
+```{r}
+par(mfrow=c(1,1), mar=c(3,3,1,1), mgp=c(1.75,.75,0))
+plot(NA,NA, xlim = c(0,4), ylim = c(0.25,17.0), xlab = "School", ylab = "Tiempo (horas)", main = "", xaxt = "n", yaxt = "n")
+axis(side = 1, at = 1:3, labels = 1:3)
+for (j in 1:3) {
+  x <- get(x = paste0("x", j))
+  boxplot(x, at = j, col = "gray90", border = "gray40", boxwex = 0.6, add = T)
+  myjitter <- jitter(rep(j, length(x)), amount = 0.15)
+  points(x = myjitter, y = x, pch = 20, col = rgb(0,0,0,.6)) 
+}
+```
+
+El análisis exploratorio no revela desviaciones importantes de un comportamiento simétrico, ni observaciones atípicas.
+
+b. Analice los datos de cada una de los colegios separadamente, utilizando un modelo Normal con una distribución previa conjugada, en la que $\mu_0 = 5$, $\sigma_0^2 = 4$, $\kappa_0 = 1$, $\nu_0 = 2$, y calcule lo siguiente:
+
+Se ajusta el modelo con distribución muestral
+$$
+y_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}(\theta,\sigma^2),\qquad i=1,\ldots,n\,,
+$$
+y distribución previa conjugada
+$$
+\begin{aligned}
+	\theta \mid \sigma^{2} & \sim \textsf{N}\left(\mu_{0}, \frac{\sigma^{2}}{\kappa_{0}}\right) \\
+	\sigma^{2} & \sim \textsf{GI}\left(\frac{\nu_{0}}{2}, \frac{\nu_{0}\,\sigma_{0}^{2}}{2}\right)
+\end{aligned}
+$$
+donde $\mu_0,\kappa_0,\nu_0,\sigma^2_0$ son los hiperparámetros del modelo.
+
+```{r}
+# hiperparametros
+mu0 <- 5  
+k0  <- 1
+s20 <- 4 
+nu0 <- 2
+# n. de simulaciones
+S <- 1000  
+# distribucion posterior
+THETA <- matrix(NA, S, 3)
+SIG2  <- matrix(NA, S, 3)
+set.seed(1)
+for (j in 1:3) {
+  # datos
+  x    <- get(x = paste0("x", j))
+  n    <- length(x)
+  # estadisticos
+  ybar <- mean(x)
+  s2   <- var(x)
+  # parametros posterior
+  kn  <- k0 + n
+  mun <- (k0*mu0 + n*ybar)/kn
+  nun <- nu0 + n
+  s2n <- (nu0*s20 +(n-1)*s2 + k0*n*(ybar-mu0)^2/kn)/nun
+  # simulacion
+  SIG2 [,j] <- 1/rgamma(n = S, shape = nun/2, rate = nun*s2n/2)
+  THETA[,j] <- rnorm(n = S, mean = mun, sd = sqrt(SIG2[,j]/kn))
+}
+```
+
+- Medias posteriores e intervalos de credibilidad al 95% para la media $\theta$, la desviación estándar $\sigma$, y el coeficiente de variación $\frac{\sigma}{\mu}$ de cada escuela.
+
+```{r}
+for (j in 1:3) {
+  tab <- rbind(
+  c(mean(THETA[,j]), quantile(THETA[,j], c(0.025,0.975))),
+  c(mean(sqrt(SIG2)[,j]), quantile(sqrt(SIG2[,j]), c(0.025,0.975))),
+  c(mean(sqrt(SIG2[,j])/THETA[,j]), quantile(sqrt(SIG2[,j])/THETA[,j], c(0.025,0.975))))
+  colnames(tab) <- c("Media","Q2.5%","Q97.5%")
+  rownames(tab) <- c("theta","sigma","cv")
+  assign(x = paste0("tab",j), value = tab)
+}
+```
+
+School 1:
+
+```{r}
+knitr::kable(x = tab1, digits = 2, align = "c")
+```
+
+School 2:
+
+```{r}
+knitr::kable(x = tab2, digits = 2, align = "c")
+```
+
+School 3:
+
+```{r}
+knitr::kable(x = tab3, digits = 2, align = "c")
+```
+
+- La probabilidad posterior de que $\theta_i < \theta_j < \theta_k$ para las seis permutaciones $\{i, j, k \}$ de $\{1, 2, 3 \}$, donde $\theta_i$ es la media del del colegio $i$.
+
+La situación más probable es $\theta_2 < \theta_3 < \theta_1$.
+
+```{r}
+# permutaciones
+per <- gtools::permutations(n = 3, r = 3)
+# probabilidades
+tab <- NULL
+for (i in 1:nrow(per)) {
+  tab <- rbind(tab, mean((THETA[,per[i,1]] < THETA[,per[i,2]]) & (THETA[,per[i,2]] < THETA[,per[i,3]])))
+}
+tab <- cbind(per, tab)
+colnames(tab) <- c("i","j","k","P(theta i < theta j < theta k")
+knitr::kable(x = tab, digits = 3, align = "c")
+```
+
+- La probabilidad posterior de que $\tilde{y}_i < \tilde{y}_j < \tilde{y}_k$ para las seis permutaciones $\{i, j, k \}$ de $\{1, 2, 3 \}$, donde $\tilde{y}_i$ es una observación de la distribución predictiva posterior de la escuela $i$.
+
+La situación más probable es nuevamente $\tilde{y}_2 < \tilde{y}_3 < \tilde{y}_1$, aunque las probabilidades no son tan disimiles con los parámetros de los modelos. 
+
+```{r}
+# distribucion predictiva posterior
+YP <- matrix(NA, S, 3)
+set.seed(1) 
+for (j in 1:3) {
+  YP[,j] <- rnorm(n = S, mean = THETA[,j], sd = sqrt(SIG2[,j]))
+}
+# probabilidades
+tab <- NULL
+for (i in 1:nrow(per)) {
+  tab <- rbind(tab, mean((YP[,per[i,1]] < YP[,per[i,2]]) & (YP[,per[i,2]] < YP[,per[i,3]])))
+}
+tab <- cbind(per, tab)
+colnames(tab) <- c("i","j","k","P(y* i < y* j < y* k")
+knitr::kable(x = tab, digits = 3, align = "c")
+```
+
+- Calcule la probabilidad posterior de que $\theta_1$ sea mayor que $\theta_2$ y $\theta_3$, y la probabilidad posterior de que $\tilde{y}_1$ sea mayor que $\tilde{y}_2$ y $\tilde{y}_3$.
+
+La probabilidad posterior de que $\theta_1$ sea mayor que $\theta_2$ y $\theta_3$ es 0.888.
+
+```{r}
+mean((THETA[,1] > THETA[,2]) & (THETA[,1] > THETA[,3]))
+```
+
+La probabilidad posterior de que $\tilde{y}_1$ sea mayor que $\tilde{y}_2$ y $\tilde{y}_3$ es 0.459.
+
+```{r}
+mean((YP[,1] > YP[,2]) & (YP[,1] > YP[,3]))
+```
+    
+c. Dibuje la distribución posterior conjunta de $(\theta, \sigma^2)$ para cada escuela.
+
+```{r}
+par(mfrow=c(1,3), mar=c(3,3,1,1), mgp=c(1.75,.75,0))
+for (j in 1:3) {
+  plot(THETA[,j], SIG2[,j], xlab = expression(theta), ylab = expression(sig^2), main = paste0("School ", j), pch = 16, cex = 0.8, col = j, xlim = c(3,12), ylim = c(5,45))
+}
+```
+
+
+d. Compruebe la bondad de ajuste del modelo para cada escuela utilizando como estadísticos de prueba la media y el coeficiente de variación.
+
+```{r}
+par(mfrow=c(3,2), mar=c(3,3,1,1), mgp=c(1.75,.75,0))
+for (j in 1:3) {
+  # datos
+  x <- get(x = paste0("x", j))
+  n <- length(x)
+  # estadisticos observados
+  EP0 <- c(mean(x), sd(x)/mean(x))
+  # distribucion predictiva
+  EP <- NULL
+  set.seed(1)
+  for (b in 1:S) {
+    xx <- rnorm(n = n, mean = THETA[b,j], sd = sqrt(SIG2[b,j]))
+    EP <- rbind(EP, c(mean(xx), sd(xx)/mean(xx)))
+  }
+  # graficos
+  display <- c("Media", "CV")
+  for (i in 1:2) {
+    ppp <- round(mean(EP[,i] > EP0[i]), 2)
+    hist(x = EP[,i], freq = F, col = "gray90", border = "gray90", xlab = display[i], ylab = "Densidad", main = paste0("School ",j,", ", display[i],", ppp = ", ppp))
+    abline(v = EP0[i], col = 2)
+    abline(v = quantile(EP[,i], c(.025,.975)), col = 1, lty = 2)
+  }
+}
+```
+
+
+2. Considere el modelo Normal dado por $y_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}(\theta,\sigma^2)$, para $i=1,\ldots,n$, con distribución previa
+$$
+\theta \mid \sigma^{2} \sim \textsf{N}\left(\theta_{0}, \kappa_{0}\sigma^{2}\right)
+\qquad\text{y}\qquad
+\sigma^{2} \sim \textsf{GI}\left(a, b\right)\,,
+$$
+donde $\theta_0,\kappa_0,a,b$ son los hiperparámetros del modelo. 
+
+a. Encuentre la distribución posterior de $(\theta,\sigma^2)$.
+b. Encuentre la distribución condicional completa de $\theta$.
+c. Encuentre la distribución marginal de $\theta$.
+d. Encuentre la distribución marginal de $\sigma^2$.
+
+Tenemos que la distribución muestral es
+\begin{align*}
+    f(\xv|\,\tev) &= \prod_{i=1}^n f(x_i|\,\tev)\\
+    &=\prod_{i=1}^n \frac{1}{\ra{2\pi}\si}\,\exp{\lf\{ -\frac{1}{2\si^2}(x_i - \te)^2 \rg\}}\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\,\exp{\lf\{ -\frac{1}{2\si^2}\sum_{i=1}^n(x_i - \te)^2 \rg\}}\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\,\exp{\lf\{ -\frac{1}{2\si^2}\sum_{i=1}^n (x_i^2 - 2\te x_i + \te^2)\rg\}}\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\,\exp{\lf\{ -\frac{1}{2\si^2}\lf[\sum_{i=1}^n x_i^2 - 2n\xb\te + n\te^2\rg] \rg\}}\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\,\exp{\lf\{ -\frac{1}{2}\lf[\frac{\sum x_i^2}{\si^2} - 2\te\frac{n\xb}{\si^2} + \frac{n\te^2}{\si^2}\rg] \rg\}}\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\,\exp{\lf\{ -\frac{1}{2}
+    \lf[\te^2\frac{n}{\si^2} - 2\te\frac{n\xb}{\si^2} \rg] \rg\}}\,
+    \exp{\lf\{ -\frac{1}{\si^2} \frac{\sum x_i^2}{2} \rg\}}
+\end{align*}
+y la distribución previa es
+\begin{align*}
+    \pi(\tev)&=\pi_{\te|\si^2}(\te|\si^2)\,\pi_{\si^2}(\si^2)\\
+    &= \frac{1}{\ra{2\pi}\,\ra{\ka_0}\,\si}\,\exp{\lf\{ -\frac{1}{2\ka_0\si^2}(\te-\te_0)^2 \rg\}} \cdot
+       \frac{b^2}{\G(a)}\,(\si^2)^{-(a+1)} \ex{-\frac{b}{\si^2}}\\
+    &= \frac{b^2}{\ra{2\pi}\,\ra{\ka_0}\,\si^{2a+3}\,\G(a)}\,
+    \exp{\lf\{ -\frac{1}{2}\lf[\te^2\frac{1}{\ka_0\si^2} - 2\te\frac{\te_0}{\ka_0\si^2}+\frac{\te_0^2}{\ka_0\si^2}\rg] \rg\}}\,
+    \ex{-\frac{b}{\si^2}}\\
+        &= \frac{b^2}{\ra{2\pi}\,\ra{\ka_0}\,\si^{2a+3}\,\G(a)}\,
+    \exp{\lf\{ -\frac{1}{2}\lf[\te^2\frac{1}{\ka_0\si^2} - 2\te\frac{\te_0}{\ka_0\si^2}\rg] \rg\}}\,
+    \ex{-\frac{1}{\si^2 }\lf[b + \frac{\te_0^2}{2\ka_0} \rg]}
+\end{align*}
+y por lo tanto, la distribución posterior es
+  \begin{align*}
+    \pi(\tev|\,\xv)&\pro
+    \frac{1}{\si^n}\,\exp{\lf\{ -\frac{1}{2}
+    \lf[\te^2\frac{n}{\si^2} - 2\te\frac{n\xb}{\si^2} \rg] \rg\}}\,
+    \exp{\lf\{ -\frac{1}{\si^2} \frac{\sum x_i^2}{2} \rg\}}\\
+    &\hspace{2cm}\cdot\frac{1}{\si^{2a+3}}\,
+    \exp{\lf\{ -\frac{1}{2}\lf[\te^2\frac{1}{\ka_0\si^2} - 2\te\frac{\te_0}{\ka_0\si^2}\rg] \rg\}}\,
+    \ex{-\frac{1}{\si^2 }\lf[b + \frac{\te_0^2}{2\ka_0} \rg]}\\
+    &\pro
+    \frac{1}{\si^{2a+n+3}}\,\exp{\lf\{ -\frac{1}{2}
+    \lf[\te^2\lf(\frac{n}{\si^2} + \frac{1}{\ka_0\si^2}\rg) - 2\te\lf(\frac{n\xb}{\si^2} + \frac{\te_0}{\ka_0\si^2}\rg) \rg] \rg\}}\\
+    &\hspace{2cm}\cdot\exp{\lf\{ -\frac{1}{\si^2} \lf[\frac{\sum x_i^2}{2} + b + \frac{\te_0^2}{2\ka_0} \rg] \rg\}}\\
+    &\pro
+    \frac{1}{\si^{2a+n+3}}\,\exp{\lf\{ -\frac{1}{2}
+    \lf[\frac{\te^2 }{\tau^2} - \frac{2\te \mu}{\tau^2} \rg] \rg\}}\,
+    \exp{\lf\{ -\frac{B}{\si^2} \rg\}}
+  \end{align*}
+donde
+  \begin{align*}
+    &\frac{1}{\tau^2}\equiv \frac{n}{\si^2} + \frac{1}{\ka_0\si^2}=
+    \frac{n\ka_0+1}{\ka_0\si^2}& &\ent\quad \caja{ \tau^2= \frac{\ka_0\si^2}{n\ka_0+1} }\\
+    &\frac{\mu}{\tau^2}\equiv \frac{n\xb}{\si^2} + \frac{\te_0}{\ka_0\si^2}=
+    \frac{n\xb\ka_0+\te_0}{\ka_0\si^2}& &\ent\quad \caja{ \mu=\frac{n\xb\ka_0+\te_0}{n\ka_0+1} }\\
+    &B\equiv \frac{\sum x_i^2}{2} + b + \frac{\te_0^2}{2\ka_0}
+    &  &\ent\quad \caja{ B= \frac{\ka_0\sum x_i^2 + 2b\ka_0 +  \te_0^2}{2\ka_0} }
+  \end{align*}
+Así, completando el cuadrado y reorganizando términos, se sigue que
+  \begin{align*}
+    \pi(\tev|\,\xv) &\pro
+    \frac{1}{\si^{2a+n+3}}\,\exp{\lf\{ -\frac{1}{2\tau^2}
+    \lf(\te - \mu \rg)^2 \rg\}}\,
+    \exp{\lf\{ -\frac{B}{\si^2} + \frac{\mu^2}{2\tau^2} \rg\}}\\
+    &\pro\frac{1}{\tau}\,\exp{\lf\{ -\frac{1}{2\tau^2}
+    \lf(\te - \mu \rg)^2 \rg\}}\,\frac{\tau}{\si^{2a+n+3}}\,
+    \exp{\lf\{ -\frac{1}{\si^2}\lf[B - \frac{\mu^2}{2}\frac{n\ka_0+1}{\ka_0}\rg] \rg\}}\\
+    &\pro\frac{1}{\tau}\,\exp{\lf\{ -\frac{1}{2\tau^2}
+    \lf(\te - \mu \rg)^2 \rg\}}\,\frac{\ra{\ka_0}\si}{\ra{ n\ka_0+1 }}\,\frac{1}{\si^{2a+n+3}}\,
+    \exp{\lf\{ -\frac{1}{\si^2}\lf[B - \frac{\mu^2}{2}\frac{n\ka_0+1}{\ka_0}\rg] \rg\}}\\
+    &\pro\,\exp{\lf\{ -\frac{1}{2\tau^2} \lf(\te - \mu \rg)^2 \rg\}}\,
+    \lf( \si^2 \rg)^{-(\al+1)}\,
+    \exp{\lf\{ -\frac{\be}{\si^2} \rg\}}
+  \end{align*}
+donde
+\begin{align*}
+   &\quad\caja{\al\equiv a+\frac{n}2 }\\
+    \be\equiv B - \frac{\mu^2}{2}\frac{n\ka_0+1}{\ka_0}\quad\ent&\quad
+    \caja{ \be=B - \frac{(n\xb\ka_0 + \te_0)^2}{2\ka_0(n\ka_0 + 1)} }
+\end{align*}
+Normalizando, se tiene que
+  $$
+  \caja{
+    \pi(\tev|\,\xv) =\frac{1}{\ra{2\pi}\tau}\,\exp{\lf\{ -\frac{1}{2\tau^2} \lf(\te - \mu \rg)^2 \rg\}}\,
+    \frac{\be^\al}{\G(\al)}\,\lf( \si^2 \rg)^{-(\al+1)}\,
+    \exp{\lf\{ -\frac{\be}{\si^2} \rg\}}
+    }
+  $$
+lo que significa que
+$$
+    p(\tev|\,\xv)=\pi_1(\te|\,\si^2, \xv)\,\pi_2(\si^2|\,\xv)
+$$
+con $\pi_1(\te|\,\si^2, \xv)=N(\mu,\tau^2)$ y $\pi_2(\si^2|\,\xv)=IG(\al,\be)$.
+
+Teniendo en cuenta esta distribución posterior, se tiene directamente que
+    \begin{align*}
+        &p(\si^2|\, \xv)= \int p(\tev|\,\xv)\,d\te=\int \pi_1(\te|\,\si^2, \xv)\,\pi_2(\si^2|\,\xv)\,d\te=\pi_2(\si^2|\,\xv)\\
+        &\ent \quad \caja{p(\si^2|\, \xv)=\pi_2(\si^2|\,\xv)}\quad\therefore\quad\caja{(\si^2|\, \xv) \sim IG(\al,\be)}
+    \end{align*}
+Además,
+    \begin{align*}
+        &p(\te|\,\si^2, \xv)= \frac{p(\te,\si^2|\,\xv)}{p(\si^2|\, \xv)}=\frac{\pi_1(\te|\,\si^2, \xv)\,\pi_2(\si^2|\,\xv)}{\pi_2(\si^2|\,\xv)}=\pi_1(\te|\,\si^2, \xv)\\
+        &\ent \quad \caja{p(\te|\,\si^2, \xv)=\pi_1(\te|\,\si^2, \xv)}\quad\therefore\quad\caja{(\te|\,\si^2, \xv) \sim N\lf(\mu,\tau^2\rg)}
+    \end{align*}
+Integrando la distribución posterior respecto a $\si^2$, se sigue que
+  \begin{align*}
+    p(\te|\,\xv)&=\int p (\tev|\,\xv)\,d\si^2=\int \pi_1(\te|\,\si^2, \xv)\,\pi_2(\si^2|\,\xv) \,d\si^2\\
+    &= \int \frac{1}{\ra{2\pi}\tau}\,\exp{\lf\{ -\frac{1}{2\tau^2} \lf(\te - \mu \rg)^2 \rg\}}\,
+    \frac{\be^\al}{\G(\al)}\,\lf( \si^2 \rg)^{-(\al+1)}\,
+    \exp{\lf\{ -\frac{\be}{\si^2} \rg\}}\,d\si^2\\
+    &= \frac{\be^\al}{\ra{2\pi}\,\G(\al)}\int \frac{\lf( \si^2 \rg)^{-(\al+1)}}{\tau}\, \exp{\lf\{ -\frac{1}{2\tau^2} \lf(\te - \mu \rg)^2 \rg\}}\,
+    \exp{\lf\{ -\frac{\be}{\si^2} \rg\}}\,d\si^2\\
+    &= \frac{c_1}{\ra{c_2}} \int \frac{\lf( \si^2 \rg)^{-(\al+1)}}{\si}\,
+    \exp{\lf\{ -\frac{1}{2\,c_2\,\si^2} \lf(\te - \mu \rg)^2 \rg\}}\,
+    \exp{\lf\{ -\frac{\be}{\si^2} \rg\}}\,d\si^2
+  \end{align*}
+donde
+  \begin{align*}
+    c_1\equiv\frac{\be^\al}{\ra{2\pi}\,\G(\al)}\quad\text{and}\quad
+    &c_2\equiv\frac{\ka_0}{n\ka_0+1}
+  \end{align*}
+Así, reconociendo términos, se sigue que
+    \begin{align*}
+    p(\te|\,\xv)
+    &= \frac{c_1}{\ra{c_2}} \int \si^{-(2\al+3)}\,
+    \exp{\lf\{ -\frac{1}{\si^2}\lf[ \frac{\lf(\te - \mu \rg)^2}{2\,c_2} + \be\rg] \rg\}}\,d\si^2\\
+    &= \frac{c_1}{\ra{c_2}}\, \frac{\G(\lam)}{\ga^\lam} \, \int  \frac{\ga^\lam}{\G(\lam)}\,  \lf(\si^2\rg)^{-(\lam+1)}\,
+    \exp{\lf\{ -\frac{\ga}{\si^2}\rg\}}\,d\si^2\\
+    &= \frac{c_1}{\ra{c_2}}\, \frac{\G(\lam)}{\ga^\lam}
+  \end{align*}
+con
+  $$
+  \caja{\ga\equiv\frac{\lf(\te - \mu \rg)^2}{2\,c_2} + \be}
+  \quad\text{and}\quad
+  \caja{ \lam\equiv \al+\frac12}
+  $$
+Entonces, reconociendo términos, se sigue que
+\begin{align*}
+p(\te|\,\xv) &= \frac{1}{\ra{2\pi c_2}}\,\,\frac{\G(\al+1/2)}{\G(\al)}\,\, \frac{\be^\al}{\ga^{\al+1/2}}\\
+&= \frac{1}{\ra{2\pi c_2}}\,\,\frac{\G(\al+1/2)}{\G(\al)}\,\frac{1}{\be^{1/2}} \,\lf(\frac{\ga}{\be}\rg)^{-(\al+1/2)}\\
+&= \frac{1}{\ra{\pi\, (2\be c_2)}}\,\,\frac{\G(\al+1/2)}{\G(\al)}\, \,\lf(\frac{(\te-\mu)^2}{2c_2\be} + 1\rg)^{-(\al+1/2)}\\
+&= \frac{\G((\nu+1)/2)}{\G(\nu/2)}\,\frac{1}{\ra{\pi\,\nu\psi^2}} \,\lf(\frac{1}{\nu}\frac{\,(\te-\mu)^2}{\psi^2} + 1\rg)^{-(\nu+1)/2}
+\end{align*}
+con
+$$
+\caja{
+\psi^2\equiv2\be c_2 }\quad\text{and}\quad \caja{\nu\equiv2\al}
+$$
+lo que significa que $(\te|\,\xv)$ sigue una distribución t Student con parámetro de localización $\mu$, parámetro de escala $\psi$ y grados de libertad $\nu$:
+$$
+\therefore\quad\caja{(\te|\,\xv) \sim t(\mu, \psi, \nu)}
+$$
+
+e. Simule $n=1000$ observaciones i.i.d de $\textsf{N}(5,1)$. Ajuste el modelo suponiendo los siguientes escenarios previos: i. estados de conocimiento previo bastante informativo acerca de los valores reales de los parámetros, ii. estado de conocimiento previo informativo acerca de $\theta$ y difuso acerca de $\sigma^2$, iii. estado de conocimiento previo informativo acerca de $\sigma^2$ y difuso acerca de $\theta$, y iv. estado de conocimiento previo difuso acerca de ambos parámetros. Caracterice la distribución posterior en cada caso.
+
+f. Suponga que está interesado en hacer inferencia sobre $\eta=\sigma/\theta$. Desarrolle un algoritmo de Monte Carlo para calcular la media posterior y un intervalo de credibilidad al 95\% para $\eta$. Use el algoritmo para calcular estas cantidades en todos los escenarios descritos anteriormente.
+
+Se simulan $n = 1000$ observaciones iid a partir de $N(5, 1)$ y se ajusta el modelo a estos datos, bajo los siguientes escenarios:
+
+1. Previas informativas sobre $\te$ y $\si^2$ alrededor de los valores verdaderos de los parámetros. 
+2. Previa informativa sobre $\te$   y previa difusa sobre $\si^2$.
+3. Previa informativa sobre $\si^2$ y previa difusa sobre $\te$.
+4. Previas difusas sobre $\te$ y $\si^2$.
+
+Para lograr la especificación anterior los hiperparámetros para $\te$ se eligen de forma que:
+
+- Previa difusa:      $\mathbb{P}[|\te-\mu_\te|<1]\geq95\%$.
+- Previa informativa: $\mathbb{P}[|\te-\mu_\te|<1]\leq25\%$.
+
+Similarmente para $\si^2$. La siguiente tabla muesta los valores de los hiperparámetros de las previas en cada caso:
+
+| Caso | $\te_0$ | $\ka_0$ | $a$   | $b$  |
+|:----:|:-------:|:-------:|:-----:|:----:|
+| 1    | 5.0     | 0.5     | 26.0  | 25.0 |
+| 2    | 5.0     | 0.5     | 10.0  | 0.01 |
+| 3    | 5.0     | 2.0     | 26.0  | 25.0 |
+| 4    | 5.0     | 2.0     | 10.0  | 0.01 |
+
+Estas previas se muestran en el siguiente gráfico:
+
+```{r}
+# datos
+n <- 1000
+theta <- 5
+sigma <- 1
+set.seed(123456789)
+data <- rnorm(n, theta, sigma)
+# grafico
+par(mfrow=c(1,2), mar=c(3,3,2,1), mgp=c(1.75,.75,0))
+# previa sigma^2
+l <- 0.01; s <- 2
+a <- 25; b <- a+1; fun <- function(x) pscl::densigamma(x, a, b)
+curve(fun, l, s, col="blue", las=1, lwd=1, n=1000, cex.axis=0.75, main=expression( paste( 'p(' , sigma^2 , ')' ) ), ylab="Densidad", xlab=expression(sigma^2))
+a <- 10; b <- 0.1; fun <- function(x) pscl::densigamma(x, a, b)
+curve(fun, l, s, col="red", lwd=1, n=1000, add=TRUE)
+abline(v=sigma, lty = 2, col="black", lwd=1)
+legend("toprigh", c("Informativa","Difusa"), col = c("blue", "red"), lty=1, lwd=2, cex=0.7, bty="n")
+# previa theta | sigma^2
+l <- -1; s <- 11
+t0 <- 5; k0 <- 0.5; fun <- function(x) dnorm( x, t0, k0*sigma^2 )
+curve(fun, l, s, col="blue", las=1, lwd=1, n=1000, cex.axis=0.75, main=expression( paste( 'p(' ,theta,'|' ,sigma^2 , ')' ) ), ylab="Densidad", xlab=expression(theta) )
+t0 <- 5; k0 <- 2; fun <- function(x) dnorm( x, t0, k0*sigma^2 )
+curve(fun, l, s, col="red", lwd=1, n=1000, add=TRUE)
+abline(v=theta, lty = 2, col="black", lwd=1)
+legend("toprigh", c("Informativa","Difusa"), col = c("blue", "red"),lty=1, lwd=2, cex=0.7, bty="n")
+```
+Se lleva a cabo una simulación de Monte Carlo con $S=100000$ iteraciones siguiendo las espresiones de las distribuciones $(\si^2|\,\xv)$ y $(\te|\,\si^2,\xv)$.
+La siguiente rutina lleva a cabo el ajuste del modelo y el resumen posterior de los parámatros correspondientes.
+
+```{r}
+fit <- function(n, theta, sigma, data, t0, k0, a, b, S) {
+	### posterior ###
+	alpha <- a + n/2
+	sum.x2 <- sum( data^2 ) # sum.x2 := sum_{i=1}^n x_i^2
+	xb <- mean(data)        # xb := sample mean of x
+	B <- ( k0*sum.x2 + 2*b*k0 + t0^2 ) / ( 2*k0 )
+	beta  <- B - ( n*xb*k0 + t0 )^2 / ( 2*k0*(n*k0 + 1) )
+	mu <- ( n*xb*k0 + t0 ) / ( n*k0 + 1 )
+	k <- sqrt( k0 / ( n*k0 +1 ) )
+	### Monte Carlo ###
+	suppressMessages(suppressWarnings(library(pscl)))
+	sig.mc <- rigamma(S, alpha, beta)
+	the.mc <- rep(NA, S)
+	eta.mc <- rep(NA, S)
+	for(i in 1:S)	{
+		tau <-  k*sqrt( sig.mc[i] )
+		the.mc[i] <- rnorm( n = 1, mean = mu, sd = tau )
+		eta.mc[i] <- sqrt( sig.mc[i] ) / the.mc[i]
+	}
+	###resumen posterio ###
+	### sigma^2 ###
+	sig.me <- mean( sig.mc )
+	sig.sd <- sd( sig.mc )
+	sig.LI <- quantile( sig.mc, probs=c(0.025) )
+	sig.LS <- quantile( sig.mc, probs=c(0.975) )
+	### theta ###
+	the.me <- mean( the.mc )
+	the.sd <- sd( the.mc )
+	the.LI <- quantile( the.mc, probs=c(0.025) )
+	the.LS <- quantile( the.mc, probs=c(0.975) )
+	### eta ###
+	eta.me <- mean( eta.mc )
+	eta.sd <- sd( eta.mc )
+	eta.LI <- quantile( eta.mc, probs=c(0.025) )
+	eta.LS <- quantile( eta.mc, probs=c(0.975) )
+	### resumen ###
+	summa <- as.matrix( c( alpha, beta, mu,
+		sig.me, sig.sd, sig.LI, sig.LS,
+		the.me, the.sd, the.LI, the.LS,
+		eta.me, eta.sd, eta.LI, eta.LS
+		) )
+	rownames(summa) <- c( 'alpha', 'beta', 'mu',
+		'sigma Media', 'sigma DE', 'sigma Q2.5%', 'sigma Q97.5%',
+		'theta Media', 'theta DE', 'theta Q2.5%', 'theta Q97.5%',
+		'eta   Media', 'eta   DE', 'eta   Q2.5%', 'eta   Q97.5%'
+	)
+	list( sig.mc, the.mc, eta.mc, summa )
+}
+```
+
+La siguiente tabla muestra un resumen posterior de las cantidades de interés $\theta$, $\sigma$, y $\eta=\sigma/\theta$.
+
+```{r}
+### resumen ###
+c1 <- fit(n, theta, sigma, data, t0=5, k0=0.5, a=26, b=25,  S=100000)
+c2 <- fit(n, theta, sigma, data, t0=5, k0=0.5, a=10, b=0.1, S=100000)
+c3 <- fit(n, theta, sigma, data, t0=5, k0=2.0, a=26, b=25,  S=100000)
+c4 <- fit(n, theta, sigma, data, t0=5, k0=2.0, a=10, b=0.1, S=100000)
+tab <- cbind(c1[[4]] , c2[[4]] , c3[[4]] , c4[[4]])
+colnames(tab) <- paste("Caso ", 1:4)
+knitr::kable(x = tab, digits = 3, align = "c")
+```
+
+A continuación se presenta una gráfico de la distribución posterior de las cantidades de interés $\theta$, $\sigma$, y $\eta=\sigma/\theta$. Dado que el tamaño de la muestra es grande, se observa que el impacto de la información previa sobre la distribución posterior es débil en todos los casos.
+
+```{r,fig.width=12, fig.height=4}
+par(mfrow=c(1,3), mar=c(3,3,2,1), mgp=c(1.75,.75,0))
+### sigma^2 ###
+sig.mc1 <- c1[[1]]; sig.mc2 <- c2[[1]]; sig.mc3 <- c3[[1]]; sig.mc4 <- c4[[1]] 
+l <- min(sig.mc1, sig.mc2, sig.mc3, sig.mc4)
+s <- max(sig.mc1, sig.mc2, sig.mc3, sig.mc4)
+plot(density(sig.mc1), las=1, cex.axis=0.75, 
+	xlim=c(l, s),
+	xlab=expression(sigma^2), sub=" ", ylab='Densidad',
+	main=expression( paste( 'p(' , sigma^2 , '|x)' ) ))
+	lines(density(sig.mc2), col='blue')
+	lines(density(sig.mc3), col='red')
+	lines(density(sig.mc4), col='green')
+abline(v=sigma, lty = 2, col='grey', lwd=1)
+legend("toprigh", legend = paste("Caso", 1:4), 
+	col = c('black',"blue", "red", 'green'), 
+	lty=1, lwd=2, cex=0.7, bty="n")
+### theta ###
+the.mc1 <- c1[[2]]; the.mc2 <- c2[[2]]; the.mc3 <- c3[[2]]; the.mc4 <- c4[[2]] 
+l <- 4.85
+s <- 5.15
+plot(density(the.mc1), las=1, cex.axis=0.75, 
+	xlim=c(l, s),
+	xlab=expression(theta), sub=" ", ylab='Densidad',
+	main=expression( paste( 'p(',theta , '|',sigma^2 , ',x)' ) ))
+	lines(density(the.mc2), col='blue')
+	lines(density(the.mc3), col='red')
+	lines(density(the.mc4), col='green')
+abline(v=theta, lty = 2, col='grey', lwd=1)
+legend("toprigh", legend = paste("Caso", 1:4), 
+	col = c('black',"blue", "red", 'green'), 
+	lty=1, lwd=2, cex=0.7, bty="n")
+### eta ###
+eta.mc1 <- c1[[3]]; eta.mc2 <- c2[[3]]; eta.mc3 <- c3[[3]]; eta.mc4 <- c4[[3]] 
+l <- 0.17
+s <- 0.23
+plot(density(eta.mc1), las=1, cex.axis=0.75, 
+	xlim=c(l, s),
+	xlab=expression(eta), sub=" ", ylab='Densidad',
+	main=expression( paste( 'p(',eta , '|',theta,',',sigma^2 , ',x)' ) ))
+	lines(density(eta.mc2), col='blue')
+	lines(density(eta.mc3), col='red')
+	lines(density(eta.mc4), col='green')
+abline(v=sigma/theta, lty = 2, col='grey', lwd=1)
+legend("toprigh", legend = paste("Caso", 1:4), 
+	col = c('black',"blue", "red", 'green'), 
+	lty=1, lwd=2, cex=0.7, bty="n")
+```
+
+
+
+
+
+3. Considere el modelo Normal $x_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}(\theta,\sigma^2)$, para $i=1,\ldots,n$, donde $\theta$ es desconocido y $\sigma^2$ es conocido. Además, considere una distribución previa para $\theta$ definida por medio de una mezcla finita de previas conjugadas de la forma
+$$
+p(\theta) = \sum_{\ell=1}^K w_\ell\,\phi(\theta\mid\mu_\ell,\tau^2)\,
+$$
+donde $K$ es un entero positivo fijo mayor o igual que 1, $w_1,\ldots,w_K$ es un sistema de pesos tales que y $\sum_{\ell=1}^K w_\ell = 1$ y $0\leq w_\ell\leq 1$ para $\ell=1,\ldots,K$, y $\phi(\theta\mid\mu,\tau^2)$ denota la densidad de la distribución Normal con media $\mu$ y varianza $\tau^2$. Una distribución previa de esta forma permite especificar estados de información previos multimodales acerca de $\theta$.
+
+a. Encuentre la distribución posterior de $\theta$.
+
+Se tiene que
+$$
+  \begin{align*}
+    \pi(\te|\xv) &\propto f(\xv|\te)\pi(\te)\\
+    &\propto \left[\prod_{i=1}^n \frac{1}{\sqrt{2\pi}\si}\,\exp{\left\{ -\frac{1}{2\si^2}(x_i-\te)^2 \right\} }\right]\cdot\\
+    &\hspace{4cm}\left[ \sum_{l=1}^K w_l\, \frac{1}{\ra{2\pi}\tau} \exp{\left\{ -\frac{1}{2\tau^2}(\te-\mu_l)^2 \right\} }\right]\\
+    &\propto \left[\exp{\left\{ -\frac{1}{2\si^2}\sum_{i=1}^n(x_i-\te)^2 \right\} }\right]\cdot
+    \left[ \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2\tau^2}(\te-\mu_l)^2 \right\} }\right]\\
+    &\propto
+    \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2}\left(\frac{1}{\si^2}\sum_{i=1}^n (x_i-\te)^2 +\frac{1}{\tau^2}(\te-\mu_l)^2\right) \right\} }\\
+    &\propto
+    \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2}\left(\frac{\sum x_i^2 - 2n\xb\te + n\te^2}{\si^2}
+     +\frac{\te^2 -2\mu_l\te+\mu_l^2}{\tau^2}\right) \right\} }\\
+    &\propto
+    \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2}\left[
+    \te^2\lf(\frac{n}{\si^2}+\frac{1}{\tau^2}\rg) - 2\te\lf(\frac{n\xb}{\si^2} + \frac{\mu_l}{\tau^2}\rg) +
+    \lf(\frac{\sum x_i^2}{\si^2} +\frac{ \mu_l^2}{\tau^2} \rg)
+     \right] \right\} }\\
+    &\propto
+    \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2}\left[
+    \frac{\te^2}{\ups^2} - 2\te\frac{\xi_l}{\ups^2} + \psi_l
+     \right] \right\} }
+  \end{align*}
+$$
+donde
+$$
+  (\ups^2)^{-1}=\frac{n}{\si^2}+\frac{1}{\tau^2}=\frac{n\tau^2+\si^2}{\si^2\tau^2}\quad\Rightarrow\quad
+  \boxed{\ups^2=\frac{\si^2\tau^2}{n\tau^2+\si^2}}
+$$
+$$
+  \frac{\xi_l}{\ups^2}=\frac{n\xb}{\si^2} + \frac{\mu_l}{\tau^2}=\frac{n\xb\tau^2+\si^2\mu_l}{\si^2\tau^2}\quad\Rightarrow\quad
+  \boxed{\xi_l=\frac{n\xb\tau^2+\si^2\mu_l}{n\tau^2+\si^2}}
+$$
+$$
+  \boxed{\psi_l=\frac{ \mu_l^2}{\tau^2}}
+$$
+Entonces,
+$$
+  \begin{align*}
+    \pi(\te|\xv) &\propto
+    \sum_{l=1}^K w_l\, \exp{\left\{ -\frac{1}{2}\left[
+    \frac{\te^2}{\ups^2} - 2\te\frac{\xi_l}{\ups^2} + \frac{\xi_l^2}{\ups^2}
+    \right] \right\} }\, \exp{\lf\{-\frac12\lf[\psi_l -\frac{\xi_l^2}{\ups^2}\rg]\rg\}}\\
+    &\propto
+    \sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} }
+  \end{align*}
+$$
+donde
+$$
+\boxed{w_l^*=w_l\,\exp{\lf\{-\frac12\lf[\psi_l -\frac{\xi_l^2}{\ups^2}\rg]\rg\}}}
+$$
+Así,
+$$
+  \begin{align*}
+    \pi(\te|\xv) &= \frac{\sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} }}{\int \sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } d\te}\\
+    &= \frac{\sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} }}
+    {\ra{2\pi}\ups\sum_{l=1}^K w_l^*\, \int \frac{1}{\ra{2\pi}\ups}\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } d\te}\\
+    &= \frac{1}{\ra{2\pi}\ups\sum_{l=1}^K w_l^*}\sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } \\
+    &= \sum_{l=1}^K \omega_l\, \frac{1}{\ra{2\pi}\ups}\exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } \\
+    &= \sum_{l=1}^K \omega_l\, \phi(\te|\xi_l,\ups^2) \\
+    %&\\
+    &\Rightarrow \boxed{\pi(\te|\xv)=\sum_{l=1}^K \omega_l\, \phi(\te|\xi_l,\ups^2)}
+  \end{align*}
+$$
+donde
+$$
+  \boxed{\omega_l=\frac{w_l^*}{\sum_{j=1}^K w_j^*}}
+$$
+y $\phi(\te|\xi_l,\ups^2)$ denota la función de densidad de una variable aleatoria con distribución Normal con media $\xi_l$ y varianza $\ups^2$.
+
+b. Encuentre la media posterior de $\theta$.
+
+La media posterior de $\theta$ está dada por
+$$
+    \begin{align*}
+        \esp{\te|\xv}&=\int \te\,\pi(\te|\xv) d\te\\
+        &=\int \te\,\lf[ \sum_{l=1}^K \omega_l\, \phi(\te|\xi_l,\ups^2)\rg] d\te\\
+        &=\sum_{l=1}^K \omega_l \lf[ \int \te\, \phi(\te|\xi_l,\ups^2) d\te\rg]\\
+        &=\sum_{l=1}^K \omega_l \xi_l\\
+        %&\\
+        &\Rightarrow\boxed{\esp{\te|\xv}=\sum_{l=1}^K \omega_l \xi_l}
+    \end{align*}
+$$
+
+c. Encuentre la distribución predictiva previa.
+
+La distribución predicrtiva previa asociada con este modelo es
+$$
+  \begin{align*}
+    p(\xv) &= \int f(\xv|\te)\,\pi(\te) d\te\\
+    &=\frac{1}{(2\pi)^{n/2}\si^n}\frac{1}{\ra{2\pi}\tau}\int \sum_{l=1}^K w_l^*\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } d\te\\
+    &=\frac{1}{(2\pi)^{(n+1)/2}\si^n\tau}\ra{2\pi}\ups\sum_{l=1}^K w_l^*\, \int \frac{1}{\ra{2\pi}\ups} \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} } d\te\\
+    &=\frac{\ups}{(2\pi)^{n/2}\si^n\tau}\sum_{l=1}^K w_l^*\\
+    &=\frac{\ups}{(2\pi)^{n/2}\si^n\tau}\sum_{l=1}^K w_l\,
+     \exp{\lf\{-\frac12\lf[\frac{\tau^2\sum x_i^2 + \si^2 \mu_l^2}{\si^2\tau^2} -\frac{\xi_l^2}{\ups^2}\rg]\rg\}}\\
+    %&\\
+    &\Rightarrow\boxed{ p(\xv)=(2\pi)^{-n/2}\frac{\ups}{\si^n\tau}\exp{\lf\{-\frac12\lf[\frac{\tau^2\sum x_i^2 + \si^2 \mu_l^2}{\si^2\tau^2} -\frac{\xi_l^2}{\ups^2}\rg]\rg\}}}
+  \end{align*}
+$$
+donde
+$$
+  \ups^2=\frac{\si^2\tau^2}{n\tau^2+\si^2} \,\,\, \text{and} \,\,\, \xi_l=\frac{n\xb\tau^2+\si^2\mu_l}{n\tau^2+\si^2}
+$$
+
+d. Encuentre la distribución predictiva posterior.
+
+Para encontrar la distribución predictiva posterior asociada con este mode, se sigue el procedimiento anterior para obtener que
+$$
+      \begin{align*}
+        g(x^*|\xv) &= \int f(x^*|\te)\, \pi(\te|\xv)\, d\te\\
+        &= \frac{1}{2\pi\si\ups} \int \left[\,\exp{\left\{ -\frac{1}{2\si^2}(x^*-\te)^2 \right\} }\right]\cdot
+    \left[ \sum_{l=1}^K \omega_l\, \exp{\left\{ -\frac{1}{2\ups^2}(\te-\xi_l)^2 \right\} }\right] \,d\te\\
+    &= \frac{1}{2\pi\si\ups}
+    \sum_{l=1}^K \omega_l\,\int \exp{\left\{ -\frac{1}{2}\left(\frac{1}{\si^2} (x^*-\te)^2 +\frac{1}{\ups^2}(\te-\xi_l)^2\right) \right\} }d\te\\
+    &= \frac{1}{2\pi\si\ups}
+    \sum_{l=1}^K \omega_l\, \int \exp{\left\{ -\frac{1}{2}\left(\frac{x^{*2} - 2x^*\te + n\te^2}{\si^2}
+     +\frac{\te^2 -2\xi_l\te+\xi_l^2}{\ups^2}\right) \right\} }d\te\\
+    &= \frac{1}{2\pi\si\ups}
+    \sum_{l=1}^K \omega_l\, \int \exp{\left\{ -\frac{1}{2}\left[
+    \te^2\lf(\frac{n}{\si^2}+\frac{1}{\ups^2}\rg) - 2\te\lf(\frac{x^*}{\si^2} + \frac{\xi_l}{\ups^2}\rg) +
+    \lf(\frac{x^{*2}}{\si^2} +\frac{ \xi_l^2}{\ups^2} \rg)
+     \right] \right\} }d\te\\
+    &= \frac{1}{2\pi\si\ups}
+    \sum_{l=1}^K \omega_l\,\int \exp{\left\{ -\frac{1}{2}\left[
+    \frac{\te^2}{s^2} - 2\te\frac{m_l}{s^2} + c_l
+     \right] \right\} } d\te
+  \end{align*}
+$$
+donde
+$$
+  (s^2)^{-1}=\frac{n}{\si^2}+\frac{1}{\ups^2}=\frac{n\ups^2+\si^2}{\si^2\ups^2}\quad\Rightarrow\quad
+  \boxed{s^2=\frac{\si^2\ups^2}{n\ups^2+\si^2}}
+$$
+$$
+  \frac{m_l}{s^2}=\frac{x^*}{\si^2} + \frac{\xi_l}{\ups^2}=\frac{x^*\ups^2+\si^2\xi_l}{\si^2\ups^2}\quad\Rightarrow\quad
+  \boxed{m_l=\frac{x^*\ups^2+\si^2\xi_l}{n\ups^2+\si^2}}
+$$
+$$
+  \boxed{c_l=\frac{ \xi_l^2}{\ups^2}}
+$$
+Entonces,
+$$
+  \begin{align*}
+    g(x^*|\xv) &= \frac{1}{2\pi\si \ups}
+    \sum_{l=1}^K \omega_l\, \int \exp{\left\{ -\frac{1}{2}\left[
+    \frac{\te^2}{s^2} - 2\te\frac{m_l}{s^2} + \frac{m_l^2}{s^2}
+    \right] \right\} }\, \exp{\lf\{-\frac12\lf[c_l -\frac{m_l^2}{s^2}\rg]\rg\}} d\te\\
+    &= \frac{1}{2\pi\si \ups} \ra{2\pi}s
+    \sum_{l=1}^K \omega_l\,\exp{\lf\{-\frac12\lf[c_l -\frac{m_l^2}{s^2}\rg]\rg\}}\, \int \frac{1}{\ra{2\pi}s} \, \exp{\left\{ -\frac{1}{2s^2}(\te-m_l)^2 \right\} }d\te\\
+    &= \frac{s}{\ra{2\pi}\si \ups}
+    \sum_{l=1}^K \omega_l\,\exp{\lf\{-\frac12\lf[c_l -\frac{m_l^2}{s^2}\rg]\rg\}}\\
+    %&\\
+    &\Rightarrow \boxed{g(x^*|\xv)=\frac{s}{\ra{2\pi}\si \ups}
+    \sum_{l=1}^K \omega_l\,\exp{\lf\{-\frac12\lf[\frac{\ups^2 x^{*2} + \si^2 \xi_l^2}{\si^2\ups^2} -\frac{m_l^2}{s^2}\rg]\rg\}}}
+  \end{align*}
+$$
+
+4. Considere el modelo Normal Trucado $x_i\mid\theta,\sigma^2 \stackrel{\text{iid}}{\sim} \textsf{N}_{(0,\infty)}(\theta,\sigma^2)$, para $i=1,\ldots,n$, donde $\sigma^2=1$. Además, considere la distribución previa para $\theta$ dada por $\theta\sim\textsf{N}_{(0,\infty)}(\mu,\tau^2)$.
+
+a. Encuentre la distribución posterior de $\theta$.
+b. ¿Este modelo se puede catalogar como un modelo conjugado?
+
+La distribución posterior es proporcional a 
+$$
+\begin{align*}
+    \pi(\te|x) &\propto f(\xv|\te)\,\pi(\te)\\
+    &\propto \lf[ \prod_{i=1}^n \frac{1}{\ra{2\pi}\Phi(\te)}\,\exp{\lf\{ -\frac12(x_i-\te)^2\rg\}}I_{[0,\infty)}(x_i) \rg]
+    \cdot \frac{1}{\ra{2\pi}\tau}\,\exp{\lf\{ -\frac{1}{2\tau^2}(\te-\mu)^2\rg\}}\\
+    &\propto \frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac12\lf[\sum_{i=1}^n (x_i-\te)^2 + \frac{(\te-\mu)^2}{\tau^2}\rg] \rg\}}\\
+    &\propto \frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac12\lf[\sum_{i=1}^nx_i^2 -2\te n\xb + \te^2  + \frac{\te^2-2\te\mu+\mu^2}{\tau^2}\rg] \rg\}}\\
+    &\propto \frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac12\lf[ \te^2\lf(1+\frac{1}{\tau^2}\rg) -2\te\lf(n\xb + \frac{\mu}{\tau^2}\rg)\rg] \rg\}}\,
+    \exp{\lf\{ -\frac12\lf[\sum_{i=1}^nx_i^2 + \frac{\mu^2}{\tau^2}\rg] \rg\}}\\
+    &\propto \frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac12 \lf[ \frac{\te^2}{\ups^2}  -\frac{2\te\xi}{\ups^2} + \frac{\xi^2}{\ups^2}\rg] \rg\}} \exp{\lf\{ \frac12 \frac{\xi^2}{\ups^2} \rg\}}\\
+    &\propto \frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac{1}{2\ups^2} (\te-\xi)^2 \rg\}}\\
+    %&\\
+    &\Rightarrow\boxed{\frac{1}{[\Phi(\te)]^n}\, \exp{\lf\{ -\frac{1}{2\ups^2} (\te-\xi)^2 \rg\}}}
+\end{align*}
+$$
+donde
+$$
+  (\ups^2)^{-1}= 1+\frac{1}{\tau^2} =\frac{\tau^2+1}{\tau^2}\quad\Rightarrow\quad
+  \boxed{\ups^2=\frac{\tau^2}{\tau^2+1}}
+$$
+$$
+  \frac{\xi}{\ups^2}=n\xb + \frac{\mu}{\tau^2}= \frac{n\xb\tau^2+\mu}{\tau^2}\quad\Rightarrow\quad
+  \boxed{\xi=\frac{n\xb\tau^2+\mu}{\tau^2+1}}
+$$
+Esta no es una previa conjugada porque se tiene un término extra, a saber ($1/[\Phi(\te)]^n$), en el núcleo de la distribución posterior que lo hace diferente del núcleo de una distribución Nomrl, lo que significa que la distribución posterior no es miembro de la familia de distribuciones Normales, y por lo tanto la previa no es conjugada. 
