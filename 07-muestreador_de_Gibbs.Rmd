@@ -2,10 +2,11 @@
 title: "Muestreador de Gibbs"
 author: 
 - Juan Sosa PhD
-- Webpage https://sites.google.com/view/juansosa/ 
-- YouTube https://www.youtube.com/c/JuanSosa1702 
+- Email   jcsosam@unal.edu.co
 - GitHub  https://github.com/jstats1702 
-- Rpubs   https://rpubs.com/jstats1702
+- Samuel Sánchez (revisión R y Python)
+- Email   ssanchezgu@unal.edu.co
+- GitHub  https://github.com/Samuel-col
 date: ""
 output:
   html_document:
@@ -373,8 +374,6 @@ plot(LL[-c(1:10)], type = "p", pch = ".", xlab = "Iteración", ylab = "Log-veros
 par(mfrow = c(1,2), mar = c(3,3,3,1), mgp = c(1.75,0.75,0))
 acf(PHI[,1], main = expression(theta))
 acf(1/PHI[,2], main = expression(sigma^2))
-# tamaño efectivo de la muestra
-coda::effectiveSize(PHI)
 ```
 
 
