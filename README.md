@@ -11,6 +11,7 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 5. Métodos de Monte Carlo.
 6. Modelo Normal.
 7. Muestreador de Gibbs.
+8. Modelo jerárquico Normal con medias específicas.
 
 ## Talleres
 
@@ -27,3 +28,4 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 - school1.dat
 - school2.dat
 - school3.dat
+- SB11_1_muestra.txt
