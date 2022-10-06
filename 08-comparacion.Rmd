@@ -2,10 +2,11 @@
 title: "Modelo jerárquico Normal con medias específicas"
 author: 
 - Juan Sosa PhD
-- Webpage https://sites.google.com/view/juansosa/ 
-- YouTube https://www.youtube.com/c/JuanSosa1702 
+- Email   jcsosam@unal.edu.co
 - GitHub  https://github.com/jstats1702 
-- Rpubs   https://rpubs.com/jstats1702
+- Samuel Sánchez (revisión R y Python)
+- Email   ssanchezgu@unal.edu.co
+- GitHub  https://github.com/Samuel-col
 date: ""
 output:
   html_document:
@@ -53,7 +54,7 @@ $$
 - Los **hiper-parámetros** del modelo son $(\nu_0,\sigma^2_0,\mu_0,\gamma_0^2,\eta_0,\tau^2_0)$.
 
 
-```{r, eval = TRUE, echo=FALSE, out.width="75%", fig.pos = 'H', fig.align = 'center'}
+```{r, eval = TRUE, echo=FALSE, out.width="60%", fig.pos = 'H', fig.align = 'center'}
 knitr::include_graphics("modelo_normal_jerarquico.png")
 ```
 
@@ -381,7 +382,7 @@ abline(v = quantile(PAR[,4], probs = c(0.025,0.5,0.975)), col = c(4,2,4), lty = 
 ```
 
 - La media global es aproximadamente 55, lo cual coincide con el diseño de la prueba.
-- Aprox. el 75\% de la variabilidad de los puntajes corresponde a la variabiliadad dentro de los departamentos.
+- Aprox. el 75\% de la variabilidad de los puntajes corresponde a la variabilidad dentro de los departamentos.
 - Aprox. el 99\% de los puntajes dentro de los departamentos están distanciados a 3 × 13 = 39 puntos entre sí. 
 - Aprox. el 99\% de los puntajes promedio de los departamentos están distanciados a 3 × 9 = 27 puntos entre sí.
 
@@ -458,7 +459,7 @@ shat <- apply(X = cadena1$THETA[,1:m], MARGIN = 2, FUN = sd)
 cv   <- 100*shat/that
 # grafico
 par(mfrow = c(2,1), mar = c(6.5,4,1.5,1), mgp = c(2.5,.75,0))
-plot(1:m, cv, xlab = "", ylab = "CV(%)", main = "", pch = 19, type = "b", xlim = c(1,m), ylim = c(0,20), cex.axis = 0.75, xaxt = "n")
+plot(1:m, cv, xlab = "", ylab = "CV(%)", main = "CV Bayesiano", pch = 19, type = "b", xlim = c(1,m), ylim = c(0,20), cex.axis = 0.75, xaxt = "n")
 axis(side = 1, at = 1:m, labels = F)
 text(x = (1:m) + 0.3, y = par("usr")[3] - 1.5, labels = ids2, srt = 70, pos = 2, xpd = T, cex = 0.75)
 abline(v = 1:m, col = "gray95", lwd = 1, lty = 3)
@@ -471,7 +472,7 @@ that <- yb
 shat <- sqrt(s2/nj)
 cv   <- 100*shat/that
 # grafico
-plot(1:m, cv, xlab = "", ylab = "CV(%)", main = "", pch = 19, type = "b", xlim = c(1,m), ylim = c(0,20), cex.axis = 0.75, xaxt = "n")
+plot(1:m, cv, xlab = "", ylab = "CV(%)", main = "CB Frecuentista", pch = 19, type = "b", xlim = c(1,m), ylim = c(0,20), cex.axis = 0.75, xaxt = "n")
 axis(side = 1, at = 1:m, labels = F)
 text(x = (1:m) + 0.3, y = par("usr")[3] - 1.5, labels = ids2, srt = 70, pos = 2, xpd = T, cex = 0.75)
 abline(v = 1:m, col = "gray95", lwd = 1, lty = 3)
