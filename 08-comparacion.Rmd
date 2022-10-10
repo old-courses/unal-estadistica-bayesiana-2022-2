@@ -67,7 +67,9 @@ $$
 \begin{aligned}
 p(\boldsymbol{\theta} \mid \boldsymbol{y}) &\propto p(\boldsymbol{y} \mid \boldsymbol{\theta})\, p(\boldsymbol{\theta}) \\
 &=  p(\boldsymbol{y}_1,\ldots,\boldsymbol{y}_m \mid \theta_1,\ldots\theta_m,\sigma^2)\times p(\theta_1,\ldots,\theta_m\mid\mu,\tau^2)\times p(\sigma^2,\mu,\tau^2) \\
-&=\prod_{j=1}^m\prod_{i=1}^{n_j} \textsf{N}\left(y_{i, j} \mid \theta_{j}, \sigma^{2}\right) \times \prod_{j=1}^m \textsf{N}\left(\theta_{j} \mid \mu, \tau^{2}\right) \times \textsf{GI}\left(\sigma^{2} \mid \tfrac{\nu_{0}}{2}, \tfrac{\nu_{0}\,\sigma_{0}^{2}}{2} \right) \times \textsf{N}\left(\mu \mid \mu_{0}, \gamma_{0}^{2}\right) \times \textsf{GI}\left(\tau^{2} \mid \tfrac{\eta_{0}}{2}, \tfrac{\eta_{0}\,\tau_{0}^{2}}{2}\right)
+&=\prod_{j=1}^m\prod_{i=1}^{n_j} \textsf{N}\left(y_{i, j} \mid \theta_{j}, \sigma^{2}\right) \times \prod_{j=1}^m \textsf{N}\left(\theta_{j} \mid \mu, \tau^{2}\right) \\
+&\quad\quad\times \textsf{GI}\left(\sigma^{2} \mid \tfrac{\nu_{0}}{2}, \tfrac{\nu_{0}\,\sigma_{0}^{2}}{2} \right) \times \textsf{N}\left(\mu \mid \mu_{0}, \gamma_{0}^{2}\right) \\ 
+&\quad\quad\quad\times \textsf{GI}\left(\tau^{2} \mid \tfrac{\eta_{0}}{2}, \tfrac{\eta_{0}\,\tau_{0}^{2}}{2}\right)
 \end{aligned}
 $$
 
@@ -509,4 +511,21 @@ axis(side = 2, at = c(2,3), labels = c(expression(hat(theta)), expression(bar(y)
 abline(h = c(2,3), col = c(4,2), lwd = 2)
 for (j in 1:m)
   segments(x0 = theta_hat[j], y0 = 2, x1 = yb[j], y1 = 3, 1)
+```
+
+
+# Referencias {-}
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("Hoffcoverbook.jpg")
+```
+
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("Gelmancoverbook.png")
+```
+
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("Reichcoverbook.jpg")
 ```
