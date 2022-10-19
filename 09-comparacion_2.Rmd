@@ -2,10 +2,11 @@
 title: "Modelo jerárquico Normal con medias y varianzas específicas"
 author: 
 - Juan Sosa PhD
-- Webpage https://sites.google.com/view/juansosa/ 
-- YouTube https://www.youtube.com/c/JuanSosa1702 
+- Email   jcsosam@unal.edu.co
 - GitHub  https://github.com/jstats1702 
-- Rpubs   https://rpubs.com/jstats1702
+- Samuel Sánchez (revisión R y Python)
+- Email   ssanchezgu@unal.edu.co
+- GitHub  https://github.com/Samuel-col
 date: ""
 output:
   html_document:
@@ -330,9 +331,9 @@ MCMC_2 <- function(B, nj, yb, s2) {
 # ajuste del modelo
 tictoc::tic()
 set.seed(1)
-cadena1_M1 <- MCMC_1(B = 20000, nj, yb, s2)
-cadena2_M1 <- MCMC_1(B = 20000, nj, yb, s2)
-cadena3_M1 <- MCMC_1(B = 20000, nj, yb, s2)
+cadena1_M1 <- MCMC_1(B = 25000, nj, yb, s2)
+cadena2_M1 <- MCMC_1(B = 25000, nj, yb, s2)
+cadena3_M1 <- MCMC_1(B = 25000, nj, yb, s2)
 tictoc::toc()
 ```
 
@@ -341,9 +342,9 @@ tictoc::toc()
 # ajuste del modelo
 tictoc::tic()
 set.seed(1)
-cadena1_M2 <- MCMC_2(B = 20000, nj, yb, s2)
-cadena2_M2 <- MCMC_2(B = 20000, nj, yb, s2)
-cadena3_M2 <- MCMC_2(B = 20000, nj, yb, s2)
+cadena1_M2 <- MCMC_2(B = 25000, nj, yb, s2)
+cadena2_M2 <- MCMC_2(B = 25000, nj, yb, s2)
+cadena3_M2 <- MCMC_2(B = 25000, nj, yb, s2)
 tictoc::toc()
 ```
 
@@ -435,9 +436,10 @@ lines(density(cadena2_M2$THETA$tau2), col = col[2])
 lines(density(cadena3_M2$THETA$tau2), col = col[2])
 legend("topright", legend = c("Modelo 1","Modelo 2"), col = col[1:2], lty = 1, lwd = 2, bty = "n")
 # posterior nu
-plot (1:15, as.numeric(table(factor(x = cadena1_M2$THETA$nu, levels = 1:15)))/20000, type = "b", pch = 20, col = col[2], xlab = expression(nu), ylab = "Densidad", main = expression(nu))
-lines(1:15, as.numeric(table(factor(x = cadena2_M2$THETA$nu, levels = 1:15)))/20000, type = "b", pch = 20, col = col[2])
-lines(1:15, as.numeric(table(factor(x = cadena3_M2$THETA$nu, levels = 1:15)))/20000, type = "b", pch = 20, col = col[2])
+plot (1:15, as.numeric(table(factor(x = cadena1_M2$THETA$nu, levels = 1:15)))/25000, type = "b", pch = 20, col = col[2], xlab = expression(nu), ylab = "Densidad", main = expression(nu))
+lines(1:15, as.numeric(table(factor(x = cadena2_M2$THETA$nu, levels = 1:15)))/25000, type = "b", pch = 20, col = col[2])
+lines(1:15, as.numeric(table(factor(x = cadena3_M2$THETA$nu, levels = 1:15)))/25000, type = "b", pch = 20, col = col[2])
+abline(h = 0, col = "lightgray")
 # posterior sigma^2
 plot (density(cadena1_M2$THETA$ups2), col = col[2],  xlab=expression(sigma), ylab = "Densidad", main = expression(sigma^2))
 lines(density(cadena2_M2$THETA$ups2), col = col[2])
