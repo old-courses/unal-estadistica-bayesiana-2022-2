@@ -33,3 +33,4 @@ Materiales del curso de **Estadística Bayesiana** ofreciendo en el Departamento
 - school3.dat
 - SB11_1_muestra.txt
 - galaxy.csv
+- sst.dat
